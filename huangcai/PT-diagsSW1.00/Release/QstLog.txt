@@ -1,0 +1,2 @@
+,T1 - Processor Temperature,T2 - Motherboard Temperature,T3 - I/O Controller Hub Temperature,T4 - Memory Controller Hub Temperature,F1 - Processor Fan,P1 - Processor Fan Controller,P2 - Chassis Inlet Fan Controller,P3 - Chassis Outlet Fan Controller,V1 - +12 Volts,V2 - +5 Volts,V3 - +3.3 Volts,V4 - Memory Controller Hub Vcc,V5 - Processor Vcc
+1,-41.00,35.00,78.07,66.00,1476,40.00,40.00,40.00,27.968,6.378,3.300,2.244,1.142

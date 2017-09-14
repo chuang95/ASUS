@@ -1,0 +1,45 @@
+Usage: 
+
+(for Goldcrest and Crimson)RSSI_VT.exe <-Sw1> <...> [/Command1] [...] ... <Parameter1> <...> ...   
+
+1. -r0=<rssi 0> £ºset RSSI Threshold for Antenna 0
+
+2. -r1=<rssi 1> £ºset RSSI Threshold for Antenna 1
+
+3. -rd=<rssi difference> £ºAntenna 0 and antenna 1 RSSI difference
+4. -t=<count> £ºset RSSI test loops
+
+5. -ip=<ip addr of AP>£ºset IP or address to connect, but useless in this version.
+
+Return code:
+
+ -1: Open adaptor failed.
+ 0: Pass.
+ 1: Ant0 RSSI < RSSI Threshold0.
+ 2: Ant1 RSSI < RSSI Threshold1.
+ 3: Ant0 RSSI < RSSI Threshold0 and Ant1 RSSI < RSSI Threshold1.
+ 4. Antenna 0 and antenna 1 RSSI difference is greater than <rssi difference>
+
+
+(for Bluejay)Ra_Ant_RSSI.exe <-Sw1> <...> [/Command1] [...] ... <Parameter1> <...> ...   
+
+1. -ssid <SSID_OF_AP>£ºset SSID of the AP to connect. (The security mode of AP must set open)
+
+2. -r0 <rssi 0>£ºMinimum RSSI value for antenna 0 to pass the test.If 0: bypass checking RSSI 0
+
+3. -r1 <rssi 1>£ºMinimum RSSI value for antenna 1 to pass the test.If 0: bypass checking RSSI 1
+
+4. -rd <rssi difference>£ºMaximum difference between antenna 0 and antenna 1 to pass the test. If the value is set to 0, this parameter is ignored.
+
+5. -rl <count>£ºAntenna RSSI query loop count. (The period is 20ms between each RSSI query)
+
+Return code:
+
+ -1: Open adaptor failed.
+ 0: Pass.
+ 1: Ant0 RSSI < RSSI Threshold0.
+ 2: Ant1 RSSI < RSSI Threshold1.
+ 3: Ant0 RSSI < RSSI Threshold0 and Ant1 RSSI < RSSI Threshold1.
+ 4. Antenna 0 and antenna 1 RSSI difference is greater than <rssi difference>
+
+ 5. Can not connect to AP after LinkTimeOut time is expired if SSID parameter is set.

@@ -1,0 +1,454 @@
+ACPI\AUTHENTICAMD_-_X86_FAMILY_16_MODEL_5\_0
+    Name: AMD Engineering Sample
+    Driver is running.
+ACPI\AUTHENTICAMD_-_X86_FAMILY_16_MODEL_5\_1
+    Name: AMD Engineering Sample
+    Driver is running.
+ACPI\AUTHENTICAMD_-_X86_FAMILY_16_MODEL_5\_2
+    Name: AMD Engineering Sample
+    Driver is running.
+ACPI\AUTHENTICAMD_-_X86_FAMILY_16_MODEL_5\_3
+    Name: AMD Engineering Sample
+    Driver is running.
+ACPI\FIXEDBUTTON\2&DABA3FF&2
+    Name: ACPI Fixed Feature Button
+    Driver is running.
+ACPI\PNP0000\4&37EFC377&0
+    Name: Programmable interrupt controller
+    Device is currently stopped.
+ACPI\PNP0100\4&37EFC377&0
+    Name: System timer
+    Device is currently stopped.
+ACPI\PNP0103\4&37EFC377&0
+    Name: High precision event timer
+    Device is currently stopped.
+ACPI\PNP0200\4&37EFC377&0
+    Name: Direct memory access controller
+    Device is currently stopped.
+ACPI\PNP0800\4&37EFC377&0
+    Name: System speaker
+    Device is currently stopped.
+ACPI\PNP0A08\1
+    Name: PCI bus
+    Driver is running.
+ACPI\PNP0B00\4&37EFC377&0
+    Name: System CMOS/real time clock
+    Driver is running.
+ACPI\PNP0C01\2&DABA3FF&2
+    Name: System board
+    Device is currently stopped.
+ACPI\PNP0C02\1
+    Name: Motherboard resources
+    Device is currently stopped.
+ACPI\PNP0C02\4
+    Name: Motherboard resources
+    Device is currently stopped.
+ACPI\PNP0C02\5
+    Name: Motherboard resources
+    Device is currently stopped.
+ACPI\PNP0C04\4&37EFC377&0
+    Name: Numeric data processor
+    Device is currently stopped.
+ACPI\PNP0C0B\2&DABA3FF&2
+    Name: ACPI Fan
+    Driver is running.
+ACPI\PNP0C0C\2&DABA3FF&2
+    Name: ACPI Power Button
+    Driver is running.
+ACPI\THERMALZONE\THRM
+    Name: ACPI Thermal Zone
+    Driver is running.
+ACPI_HAL\PNP0C08\0
+    Name: Microsoft ACPI-Compliant System
+    Driver is running.
+DISPLAY\HWP26A9\5&3A68EA30&0&UID273
+    Name: HP w2207 Wide LCD Monitor
+    Driver is running.
+DISPLAY\HWP2805\5&3A68EA30&0&UID272
+    Name: Generic PnP Monitor
+    Driver is running.
+HDAUDIO\FUNC_01&VEN_10EC&DEV_0888&SUBSYS_103C2A6C&REV_1001\4&36519FAE&0&0001
+    Name: Realtek High Definition Audio
+    Driver is running.
+HID\VID_03F0&PID_140C&MI_00\7&32A81E41&0&0000
+    Name: HID Keyboard Device
+    Driver is running.
+HID\VID_03F0&PID_140C&MI_01&COL01\7&17378DAE&0&0000
+    Name: HID-compliant mouse
+    Driver is running.
+HID\VID_03F0&PID_140C&MI_01&COL02\7&17378DAE&0&0001
+    Name: HID-compliant consumer control device
+    Driver is running.
+HID\VID_03F0&PID_140C&MI_01&COL03\7&17378DAE&0&0002
+    Name: HID-compliant device
+    Driver is running.
+HID\VID_03F0&PID_140C&MI_01&COL04\7&17378DAE&0&0003
+    Name: HID-compliant device
+    Driver is running.
+HID\VID_03F0&PID_140C&MI_01&COL05\7&17378DAE&0&0004
+    Name: HID-compliant device
+    Driver is running.
+HID\VID_03F0&PID_140C&MI_01&COL06\7&17378DAE&0&0005
+    Name: HID-compliant device
+    Driver is running.
+HID\VID_03F0&PID_140C&MI_01&COL07\7&17378DAE&0&0006
+    Name: HID-compliant device
+    Driver is running.
+HID\VID_03F0&PID_140C&MI_01&COL08\7&17378DAE&0&0007
+    Name: HID-compliant device
+    Driver is running.
+PCI\VEN_10DE&DEV_03E0&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&08
+    Name: PCI standard ISA bridge
+    Driver is running.
+PCI\VEN_10DE&DEV_03E8&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&48
+    Name: PCI standard PCI-to-PCI bridge
+    Driver is running.
+PCI\VEN_10DE&DEV_03E9&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&58
+    Name: PCI standard PCI-to-PCI bridge
+    Driver is running.
+PCI\VEN_10DE&DEV_03E9&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&60
+    Name: PCI standard PCI-to-PCI bridge
+    Driver is running.
+PCI\VEN_10DE&DEV_03EA&SUBSYS_2A6C103C&REV_A1\3&2411E6FE&0&00
+    Name: PCI standard RAM Controller
+    Device is currently stopped.
+PCI\VEN_10DE&DEV_03EB&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&09
+    Name: NVIDIA nForce PCI System Management
+    Device is currently stopped.
+PCI\VEN_10DE&DEV_03EC&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&30
+    Name: Standard Dual Channel PCI IDE Controller
+    Driver is running.
+PCI\VEN_10DE&DEV_03EF&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&38
+    Name: NVIDIA nForce 10/100 Mbps Ethernet 
+    Driver is running.
+PCI\VEN_10DE&DEV_03F0&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&28
+    Name: High Definition Audio Controller
+    Driver is running.
+PCI\VEN_10DE&DEV_03F1&SUBSYS_2A6C103C&REV_A3\3&2411E6FE&0&10
+    Name: Standard OpenHCD USB Host Controller
+    Driver is running.
+PCI\VEN_10DE&DEV_03F2&SUBSYS_2A6C103C&REV_A3\3&2411E6FE&0&11
+    Name: Standard Enhanced PCI to USB Host Controller
+    Driver is running.
+PCI\VEN_10DE&DEV_03F3&SUBSYS_2A6C103C&REV_A1\3&2411E6FE&0&20
+    Name: PCI standard PCI-to-PCI bridge
+    Driver is running.
+PCI\VEN_10DE&DEV_03F5&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&0A
+    Name: PCI standard RAM Controller
+    Device is currently stopped.
+PCI\VEN_10DE&DEV_03F6&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&40
+    Name: NVIDIA nForce Serial ATA Controller
+    Driver is running.
+PCI\VEN_10DE&DEV_03F6&SUBSYS_2A6C103C&REV_A2\3&2411E6FE&0&41
+    Name: NVIDIA nForce Serial ATA Controller
+    Driver is running.
+PCI\VEN_10DE&DEV_06E6&SUBSYS_90041B0A&REV_A1\4&12D4361D&0&0048
+    Name: NVIDIA GeForce G100
+    Driver is running.
+PCI\VEN_11C1&DEV_5811&SUBSYS_00000000&REV_70\4&D6CF7C4&0&2820
+    Name: AGERE OHCI Compliant IEEE 1394 Host Controller
+    Driver is running.
+PCIIDE\IDECHANNEL\4&1D839086&0&0
+    Name: ATA Channel 0
+    Driver is running.
+PCIIDE\IDECHANNEL\4&1D839086&0&1
+    Name: ATA Channel 1
+    Driver is running.
+ROOT\*ISATAP\0000
+    Name: isatap.{AF57634A-C142-4698-881B-A22F1D080C8C}
+    Driver is running.
+ROOT\ACPI_HAL\0000
+    Name: ACPI x86-based PC
+    Driver is running.
+ROOT\ISCSIPRT\0000
+    Name: Microsoft iSCSI Initiator
+    Driver is running.
+ROOT\LEGACY_AFD\0000
+    Name: Ancilliary Function Driver for Winsock
+    Driver is running.
+ROOT\LEGACY_BEEP\0000
+    Name: Beep
+    Driver is running.
+ROOT\LEGACY_BHDRVX86\0000
+    Name: Symantec Heuristics Driver
+    Driver is running.
+ROOT\LEGACY_CCHP\0000
+    Name: Symantec Hash Provider
+    Driver is running.
+ROOT\LEGACY_CLFS\0000
+    Name: Common Log (CLFS)
+    Driver is running.
+ROOT\LEGACY_CRCDISK\0000
+    Name: Crcdisk Filter Driver
+    Driver is running.
+ROOT\LEGACY_DXGKRNL\0000
+    Name: LDDM Graphics Subsystem
+    Driver is running.
+ROOT\LEGACY_EECTRL\0000
+    Name: Symantec Eraser Control driver
+    Driver is running.
+ROOT\LEGACY_ERASERUTILREBOOTDRV\0000
+    Name: EraserUtilRebootDrv
+    Driver is running.
+ROOT\LEGACY_HTTP\0000
+    Name: HTTP
+    Driver is running.
+ROOT\LEGACY_IDSVIX86\0000
+    Name: IDSVix86
+    Driver is running.
+ROOT\LEGACY_KSECDD\0000
+    Name: KSecDD
+    Driver is running.
+ROOT\LEGACY_LLTDIO\0000
+    Name: Link-Layer Topology Discovery Mapper I/O Driver
+    Driver is running.
+ROOT\LEGACY_MOUNTMGR\0000
+    Name: Mount Point Manager
+    Driver is running.
+ROOT\LEGACY_MPSDRV\0000
+    Name: Windows Firewall Authorization Driver
+    Driver is running.
+ROOT\LEGACY_MSISADRV\0000
+    Name: ISA/EISA Class Driver
+    Driver is running.
+ROOT\LEGACY_NAVENG\0000
+    Name: NAVENG
+    Driver is running.
+ROOT\LEGACY_NAVEX15\0000
+    Name: NAVEX15
+    Driver is running.
+ROOT\LEGACY_NDIS\0000
+    Name: NDIS System Driver
+    Driver is running.
+ROOT\LEGACY_NDPROXY\0000
+    Name: NDProxy
+    Driver is running.
+ROOT\LEGACY_NETBT\0000
+    Name: NETBT
+    Driver is running.
+ROOT\LEGACY_NSIPROXY\0000
+    Name: NSI proxy service
+    Driver is running.
+ROOT\LEGACY_NULL\0000
+    Name: Null
+    Driver is running.
+ROOT\LEGACY_NVRAID\0000
+    Name: NVIDIA nForce RAID Driver   
+    Driver is running.
+ROOT\LEGACY_PCD5SRVC{BD6912E3-AC9D80E8-05040000}\0000
+    Name: PCD5SRVC{BD6912E3-AC9D80E8-05040000} - PCDR Kernel Mode Service Helper Driver
+    Driver is running.
+ROOT\LEGACY_PEAUTH\0000
+    Name: PEAUTH
+    Driver is running.
+ROOT\LEGACY_PSCHED\0000
+    Name: QoS Packet Scheduler
+    Driver is running.
+ROOT\LEGACY_RASACD\0000
+    Name: Remote Access Auto Connection Driver
+    Driver is running.
+ROOT\LEGACY_RDPCDD\0000
+    Name: RDPCDD
+    Driver is running.
+ROOT\LEGACY_RDPENCDD\0000
+    Name: RDP Encoder Mirror Driver
+    Driver is running.
+ROOT\LEGACY_RSPNDR\0000
+    Name: Link-Layer Topology Discovery Responder
+    Driver is running.
+ROOT\LEGACY_RTPORT\0000
+    Name: rtport
+    Driver is running.
+ROOT\LEGACY_SECDRV\0000
+    Name: Security Driver
+    Driver is running.
+ROOT\LEGACY_SMB\0000
+    Name: Message-oriented TCP/IP and TCP/IPv6 Protocol (SMB session)
+    Driver is running.
+ROOT\LEGACY_SPLDR\0000
+    Name: Security Processor Loader Driver
+    Driver is running.
+ROOT\LEGACY_SRTSPX\0000
+    Name: SRTSPX
+    Driver is running.
+ROOT\LEGACY_SYMDNS\0000
+    Name: SYMDNS
+    Driver is running.
+ROOT\LEGACY_SYMEVENT\0000
+    Name: SymEvent
+    Driver is running.
+ROOT\LEGACY_SYMFW\0000
+    Name: SYMFW
+    Driver is running.
+ROOT\LEGACY_SYMIM\0000
+    Name: Symantec Network Security Intermediate Filter Driver
+    Driver is running.
+ROOT\LEGACY_SYMNDISV\0000
+    Name: SYMNDISV
+    Driver is running.
+ROOT\LEGACY_SYMREDRV\0000
+    Name: SYMREDRV
+    Driver is running.
+ROOT\LEGACY_SYMTDI\0000
+    Name: SYMTDI
+    Driver is running.
+ROOT\LEGACY_TCPIP\0000
+    Name: TCP/IP Protocol Driver
+    Driver is running.
+ROOT\LEGACY_TCPIPREG\0000
+    Name: TCP/IP Registry Compatibility
+    Driver is running.
+ROOT\LEGACY_TDEIO\0000
+    Name: TDEIO
+    Driver is running.
+ROOT\LEGACY_TDX\0000
+    Name: NetIO Legacy TDI Support Driver
+    Driver is running.
+ROOT\LEGACY_VGASAVE\0000
+    Name: VgaSave
+    Driver is running.
+ROOT\LEGACY_VOLMGRX\0000
+    Name: Dynamic Volume Manager
+    Driver is running.
+ROOT\LEGACY_VOLSNAP\0000
+    Name: Storage volumes
+    Driver is running.
+ROOT\LEGACY_WANARPV6\0000
+    Name: Remote Access IPv6 ARP Driver
+    Driver is running.
+ROOT\LEGACY_WDF01000\0000
+    Name: Kernel Mode Driver Frameworks service
+    Driver is running.
+ROOT\LEGACY_{55662437-DA8C-40C0-AADA-2C816A897A49}\0000
+    Name: {55662437-DA8C-40c0-AADA-2C816A897A49}
+    Driver is running.
+ROOT\MS_L2TPMINIPORT\0000
+    Name: WAN Miniport (L2TP)
+    Driver is running.
+ROOT\MS_NDISWANBH\0000
+    Name: WAN Miniport (Network Monitor)
+    Driver is running.
+ROOT\MS_NDISWANIP\0000
+    Name: WAN Miniport (IP)
+    Driver is running.
+ROOT\MS_NDISWANIPV6\0000
+    Name: WAN Miniport (IPv6)
+    Driver is running.
+ROOT\MS_PPPOEMINIPORT\0000
+    Name: WAN Miniport (PPPOE)
+    Driver is running.
+ROOT\MS_PPTPMINIPORT\0000
+    Name: WAN Miniport (PPTP)
+    Driver is running.
+ROOT\MS_SSTPMINIPORT\0000
+    Name: WAN Miniport (SSTP)
+    Driver is running.
+ROOT\RDP_KBD\0000
+    Name: Terminal Server Keyboard Driver
+    Driver is running.
+ROOT\RDP_MOU\0000
+    Name: Terminal Server Mouse Driver
+    Driver is running.
+ROOT\SYSTEM\0000
+    Name: Plug and Play Software Device Enumerator
+    Driver is running.
+ROOT\SYSTEM\0002
+    Name: Microsoft System Management BIOS Driver
+    Driver is running.
+ROOT\UMBUS\0000
+    Name: UMBus Root Bus Enumerator
+    Driver is running.
+ROOT\VOLMGR\0000
+    Name: Volume Manager
+    Driver is running.
+SCSI\DISK&VEN_MAXTOR_6&PROD_L160M0\4&10CA9E7B&0&000000
+    Name: Maxtor 6 L160M0 SCSI Disk Device
+    Driver is running.
+STORAGE\VOLUME\1&19F7E59C&0&SIGNATURE1549F232OFFSET22E7916400LENGTH25B841E00
+    Name: Generic volume
+    Driver is running.
+STORAGE\VOLUME\1&19F7E59C&0&SIGNATURE1549F232OFFSET7E00LENGTH22E790E600
+    Name: Generic volume
+    Driver is running.
+STORAGE\VOLUME\1&19F7E59C&0&_??_USBSTOR#DISK&VEN_SANDISK&PROD_USB_FLASH_DRIVE&REV_6.51#0880D97100404999&0#{53F56307-B6BF-11D0-94F2-00A0C91EFB8B}
+    Name: Generic volume
+    Driver is running.
+STORAGE\VOLUME\1&19F7E59C&0&_??_USBSTOR#DISK&VEN_SANDISK&PROD_USB_FLASH_DRIVE&REV_6.51#0DD1097091D36971&0#{53F56307-B6BF-11D0-94F2-00A0C91EFB8B}
+    Name: Generic volume
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT1
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT10
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT11
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT12
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT2
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT3
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT4
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT5
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT6
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT7
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT8
+    Name: Generic volume shadow copy
+    Driver is running.
+STORAGE\VOLUMESNAPSHOT\HARDDISKVOLUMESNAPSHOT9
+    Name: Generic volume shadow copy
+    Driver is running.
+UMB\UMB\1&841921D&0&PRINTERBUSENUMERATOR
+    Name: UMBus Enumerator
+    Driver is running.
+UMB\UMB\1&841921D&0&WPDBUSENUMROOT
+    Name: UMBus Enumerator
+    Driver is running.
+USB\ROOT_HUB\4&104A570D&0
+    Name: USB Root Hub
+    Driver is running.
+USB\ROOT_HUB20\4&25B99F80&0
+    Name: USB Root Hub
+    Driver is running.
+USB\VID_03F0&PID_140C\5&77317EF&0&4
+    Name: USB Composite Device
+    Driver is running.
+USB\VID_03F0&PID_140C&MI_00\6&1BEAF0&0&0000
+    Name: USB Human Interface Device
+    Driver is running.
+USB\VID_03F0&PID_140C&MI_01\6&1BEAF0&0&0001
+    Name: USB Human Interface Device
+    Driver is running.
+USB\VID_08EC&PID_0020\0880D97100404999
+    Name: USB Mass Storage Device
+    Driver is running.
+USB\VID_08EC&PID_0020\0DD1097091D36971
+    Name: USB Mass Storage Device
+    Driver is running.
+USBSTOR\DISK&VEN_SANDISK&PROD_USB_FLASH_DRIVE&REV_6.51\0880D97100404999&0
+    Name: SanDisk USB Flash Drive USB Device
+    Driver is running.
+USBSTOR\DISK&VEN_SANDISK&PROD_USB_FLASH_DRIVE&REV_6.51\0DD1097091D36971&0
+    Name: SanDisk USB Flash Drive USB Device
+    Driver is running.
+WPDBUSENUMROOT\UMB\2&37C186B&0&STORAGE#VOLUME#1&19F7E59C&0&_??_USBSTOR#DISK&VEN_SANDISK&PROD_USB_FLASH_DRIVE&REV_6.51#0880D97100404999&0#
+    Name: USB Flash Drive 
+    Driver is running.
+WPDBUSENUMROOT\UMB\2&37C186B&0&STORAGE#VOLUME#1&19F7E59C&0&_??_USBSTOR#DISK&VEN_SANDISK&PROD_USB_FLASH_DRIVE&REV_6.51#0DD1097091D36971&0#
+    Name: USB Flash Drive 
+    Driver is running.
+151 matching device(s) found.

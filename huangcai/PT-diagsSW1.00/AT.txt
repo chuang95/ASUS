@@ -1,0 +1,2365 @@
+// Common Tool Utility, Copyright by Pegatron
+//---------------------------------------------------------------------------
+/*
+-----------------------------------------------------------------------------
+Rev2.32: May 15, 2009: Craige
+	  1.Fixed /ChkCha to get correct string from files contains blank and enter.
+-----------------------------------------------------------------------------
+Rev2.31: Apr 28, 2009: Craige
+	  1.Fixed /CSum to calculate .BIN files correctly.
+-----------------------------------------------------------------------------
+Rev2.30: Apr 20, 2009: Craige
+      1.Add -c parameter for /Find command to consider case sensitive.
+-----------------------------------------------------------------------------
+Rev2.29: Feb 3, 2009: Miracle
+      1. Add -d36 parameter for /CSum command, to get remainder of checksum
+	 divide by 36 (add by Jackson)
+      2. Fixed return code of /CF and the bug when <diff value> is equal to
+	 zero (add by Miracle)
+-----------------------------------------------------------------------------
+Rev2.28: Dec 18, 2008: Craige
+  1. Fixed /CF, /CF1, and /H2D to support > / >> command of Dos.
+  2. Fixed return code of /CF and /CF1 -diff <diff value>.
+-----------------------------------------------------------------------------
+Rev2.27: Nov 12, 2008: Craige
+  1. Fixed /CF, /CF1, and /H2D, to be no limited length of string for file1 and file2.
+  2. Fixed /CV to correct the wrong comparison from the length of string.
+-----------------------------------------------------------------------------
+Rev2.26: Oct 09, 2008: Jackson
+	 1. Add /Random1 command to produce random character
+-----------------------------------------------------------------------------
+Rev2.25: Jun 05, 2008: Miracle
+	 1. Added /CopyData, -str1, -str2 to copy data behind <str1> from
+	    file1 to file2.
+	 2. Added /CmpData, -str to check if the data behind <str> in file1
+	    is also in file2.
+-----------------------------------------------------------------------------
+Rev2.24: Feb 26, 2008: Brian
+	 1. Added new parameter (-nologo) to do not show Pegatron Logo.
+-----------------------------------------------------------------------------
+Rev2.23: Nov. 23, 2007: Brian
+	 1. Added New Command (/CLS) & new parameter -line to check line status.
+-----------------------------------------------------------------------------
+Rev2.22: Sep. 21, 2007: Brian
+	 1. Fixed that using -sl with /C command to make read the error number
+	    of lines in both files.
+------------------------------------------------------------------------------
+Rev2.21: Sep. 13, 2007: Brian
+	 1.Fixed -LSB of GSTR / GSTR1 cann't support > / >> command of Dos
+-----------------------------------------------------------------------------
+Rev2.20: Sep. 07, 2007: Brian
+	 1.Added /BigWord <file> Command to display big size number of Hex. or
+	 Dec. in File.
+-----------------------------------------------------------------------------
+Rev2.19: Aug. 24, 2007: Brian
+	 1.Added /random command with -lenght parameter to create random number
+	 based on 16 with Byte unit.
+-------------------------------------------------------------------------------
+Rev2.18: Aug. 20, 2007: Brian
+	 1. Fixed the String Buffer of GetString Function from 150 to 1024
+	 2. added -diff parameter with Command /CV, /CV1, /CF & CF1 for comparing
+	    the file in value and user value if it is in difference?
+	 3. Modified -sl -el & -ea -sa can be used with -start_comma / -end_comma
+	    togother.
+-----------------------------------------------------------------------------
+Rev2.17: Jul. 23, 2007: Brian
+	 1. Mixed -sl, -el & -i parameters with /C Command.
+	 2. New Added /CV1 Command compare the floating Data in file with value.
+-------------------------------------------------------------------------------
+Rev2.16: Jun. 28, 2007: Jackson
+	 1. Add /CF1 command to compare two files for hex data
+-------------------------------------------------------------------------------
+Rev2.15: Apr. 18, 2007: Brian
+	 1. Add -start_comma | -end_comma to searching string by comma location
+-------------------------------------------------------------------------------
+Rev2.14: Mar. 25, 2007: Jackson
+	 Add -LSB parameter to specify last bit data for /GStr, /GStr1
+-------------------------------------------------------------------------------
+Rev2.13: Jan. 25, 2007: Jackson
+	 1. Modify /GStr command to cancel change line action
+	 2. Add /GStr1 command, there is change line action different from
+	    /GStr command
+-------------------------------------------------------------------------------
+Rev2.12: Oct. 20, 2006: Jackson
+	 1. Modify /GStr command to add change line action
+	 2. Modify /TStr command to cancel string length limitation
+-------------------------------------------------------------------------------
+Rev2.11: Jul 24, 2006: Jackson
+	 Add /R7 command
+-------------------------------------------------------------------------------
+Rev2.10: Jan 10, 2006: Jackson
+	 Modify /R6 command
+-------------------------------------------------------------------------------
+Rev2.09: Jan 2, 2006: Jackson
+	 Add /R6 command to set environment variable for 25 digits barcode
+-------------------------------------------------------------------------------
+Rev2.08: Oct 31, 2005: Jackson
+	 1. Add -T parameter to transfer file to normal text format for sysinfo.ap
+	    file
+	 2. Add /Find command to search string from file
+-------------------------------------------------------------------------------
+Rev2.07: Sep 13, 2005: Jackson
+	 1. Add /R5 command to set environment variable for barcode
+	 2. Add /OBWSN command to check serial number rule for OBW
+	    (PE is Magic_Lue)
+-------------------------------------------------------------------------------
+Rev2.06: Feb 1, 2005: Jackson
+	 1. Enlarge /GSTR matrix size from 100 char. to 150 char.
+	 2. Fix /CHKSTR bug
+-------------------------------------------------------------------------------
+Rev2.05: Dec 29, 2004: Jackson
+	 1. Add /R1, /R2, /R3 command copy from scan.exe, editor by Yushih
+	 2. Modify /R2 command for 19 bit data
+	 3. Add /R4 command to set environment variable and file name for 19
+	    bit
+-------------------------------------------------------------------------------
+Rev2.04: May 11, 2004: Jackson
+	 1. Modify /TIB command
+-------------------------------------------------------------------------------
+Rev2.03: March 23, 2004: Yushih
+	 1. ADD /TIB function
+-----------------------------------------------------------------------------
+Rev2.02: Dec 08, 2003: Max
+	 1. /SET option ignore 'toupper' function
+-----------------------------------------------------------------------------
+Rev2.02: Nov 20, 2003: Jackson
+	 1. Add -i parameter for ignoring case-sensitive
+-----------------------------------------------------------------------------
+Rev2.01: Sep 02, 2003: Jackson
+	 1. Add /SET, -sstr, -sev parameters for setting environment variable
+-----------------------------------------------------------------------------
+Rev2.00: Aug 15, 2003: Jackson
+	 1. ASUSTool.exe Rev1.15 --> AT.exe Rev2.00
+	 2. First Release AT.exe
+//---------------------------------------------------------------------------
+*/
+#include <math.h>
+#include "AT.h"
+#include "global.h"
+
+//---------------------------------------------------------------------------
+void Logo(void)
+{
+  asus.cls();
+  asus.PrintStr(1,1,"Build DATE:2009-05-15",0,0x07);
+  asus.PrintStr(1,2,"COMMON Tool, Copyright by Pegatron Rev2.32",0,0x07);
+  asus.PrintCh(1,3,'=',0x07,80);
+  // Set company & department name
+  asus.PrintTeamTitle();
+  asus.CursorOff();
+  gotoxy(1,4);
+}
+
+//--------------------------------------------------------------------------
+void ReadMe(void)
+{
+  for(;;){
+    Logo();
+    printf("AT.EXE <-Sw1> <...> [/Command1] [...] ... <Parameter1> <...> ...\n");
+    printf("  /FS <file> <value>: Get the file size(A) & compare with value(B)\n");
+    printf("  /GMT: Transfer now date & time to GMT(seconds)\n");
+    printf("  /CF  <file1> <file2>: Compare <file1> and <file2> for Dec. data\n");
+    printf("  /CF1 <file1> <file2>: Compare <file1> and <file2> for Hex. data\n");
+    printf("  /CV  <file> <value>: Compare Dec|Hex  value(A) in file with value(B)\n");
+    printf("  /CV1 <file> <value>: Compare floating value(A) in file with value(B)\n");
+    printf("    if A > B return code=2; if A = B return code=1; if A < B return code=0\n");
+    printf("    -diff <value>: diff value (C) in value (A) and value (B)\n");
+    printf("    if A-B > C return code=2\n");
+    printf("    if A-B = C return code=1\n");
+    printf("    if A-B < C return code=0\n");
+//    printf("  /CH <file> <value(Hex)>: Compare value(A) in file with value(B) for Hex\n");
+//    printf("    if A > B return code=2; if A = B return code=1; if A < B return code=0\n");
+    printf("  /ChkChar <file> <bit> <char>: Read a data from file and check with char\n");
+    printf("  /Find <file> <string>: Search string from file\n");
+	printf("    -c: Case sensitive for /Find\n");
+    printf("    -t: Transfer file to normal text format for /ChkStr, /Find\n");
+    printf("\nReturn Code: OK(0), ERROR(-1)");
+    textcolor(15);
+    textbackground(1);
+    cprintf("\n\rESC");
+    printf(": exit this help");
+    asus.PrintStr(1,24,"... Press any key to next page ...",0,0x07);
+    if(getch()==0x1B){
+      textbackground(0);
+      cprintf("\r                                                           ");
+      break;
+    }
+    clrscr();
+    Logo();
+    printf("  /TStr <file> <s1> <s2>: Replace string s1 by s2 for file, save to update.txt\n");
+    printf("  /OBWSN <file>: Check OBW Serial Number rule\n");
+    printf("  /CB <fn1> <fn2> ... <fnN> : Create N batch & pro files base on N ini files\n");
+    printf("    -chkbc <N>: Scan barcode N times and compare, N must >= 2\n");
+    printf("    -del <M>: Delete Mth bit barcode and change 90 code to 80 code\n");
+    printf("    -p <string>: Set the prompt string\n");
+    printf("  /CBC <fn1>...<fnN>: Create batch & pro file by comparing barcode & ini file\n");
+    printf("  /SB <data_file> <ini_file>: Set 90 barcode environment variable\n");
+    printf("  /RC <file> <bit>: Return character(0~9,A~Z) code\n");
+    printf("  /SET <f1> <f2>: Set environment variable base on f1, then write to f2\n");
+    printf("                  where f1: input file  ,  f2: output file\n");
+    printf("    -sstr <str>: Search string\n");
+    printf("    -sev <str>: Set environment variable base on string\n");
+    printf("  /Random : Create Random Number based on 16\n");
+    printf("    -length <value> : Set the length <value> of Random number in Byte Unit\n");
+    printf("  /Random1 : Produce random character\n");
+    printf("    -length1 <value> : Set random character length\n");
+    printf("\nReturn Code: OK(0), ERROR(-1)");
+    textcolor(15);
+    textbackground(1);
+    cprintf("\n\rESC");
+    printf(": exit this help");
+    asus.PrintStr(1,24,"... Press any key to next page ...",0,0x07);
+    if(getch()==0x1B){
+      textbackground(0);
+      cprintf("\r                                                           ");
+      break;
+    }
+    clrscr();
+    Logo();
+    printf("  /D <file> <x> <y> <attr>: Display txt file\n");
+    printf("  /S : Scan barcode and save to barcode.dat\n");
+    printf("  /TIB <F1.BIN> <F2.TXT> <F.BIN> <place>: Write F2.TXT into certain position\n");
+    printf("					  in F1.BIN, and save as F.BIN.\n");
+    printf("  /TBC <file>: Transfer barcode format\n");
+    printf("  /C <fn1> <fn2>: file(fn1 & fn2) compare content, default range is 1 to end\n");
+    printf("    -i: Ignore case-sensitive for /C\n");
+    printf("  /ChkStr <file> <string>: Read data from file and check with string\n");
+    printf("  /H2D <file>: Transfer Hex to Dec value\n");
+    printf("  /CSum <fn> <checksum>: Calculate the checksum of file(fn)\n");
+    printf("    -d36: divide by 36\n");
+    printf("  /GStr|/GStr1 <fn>: Get string from file, /GStr1 will change line\n");
+    printf("    -LSB <n>: specify last <n> bit data for /GStr|/GStr1\n");
+    printf("    -start_comma | -end_comma <n>: set the range of searching string by comma\n");
+    printf("    -sl|-el <l>: Set the start|end line of file for /C, /CSum, /GStr\n");
+    printf("    -sa|-ea <n>: Set start|end byte of file for /C,/CSum,/ChkStr,/H2D,/GStr\n");
+    printf("\nReturn Code: OK(0), ERROR(-1)");
+    textcolor(15);
+    textbackground(1);
+    cprintf("\n\rESC");
+    printf(": exit this help");
+    asus.PrintStr(1,24,"... Press any key to next page ...",0,0x07);
+    if(getch()==0x1B){
+      textbackground(0);
+      cprintf("\r                                                           ");
+      break;
+    }
+    clrscr();
+    Logo();
+    printf("  /R1|/R2 <fn> <char>: Set environment variable (for 14 & 15 bit)\n");
+    printf("  /R3 <fn> <bit> <char>: Set environment variable and file name (for 14,15 bit)\n");
+    printf("  /R4 <fn1> <char> <fn2>: Set environment variable and file name (for 19 bit)\n");
+    printf("  /R5|/R6 <fn> <bit1> <bit2> <env_var>: Set environment variable for barcode\n");
+    printf("  /R7 <fn> <bit> <char1> <char2>: Set environment variable and file name\n");
+    printf("  /BigWord <file>: Display the Hex. or Dec. number in file with Big Size\n");
+    printf("  /CLS <file> : Show each Line status in a File\n");
+    printf("    -line <n> : Set the estimated number of line in a file\n");
+    printf("    -nologo: Do not show Pegatron Logo, for all commands.\n");
+    printf("  /CopyData <file1> <file2>: Copy data from file1 to file2\n");
+    printf("    -str1 <str>: Copy data behind <str>\n");
+    printf("    -str2 <str>: Paste data behind <str>\n");
+    printf("  /CmpData <file1> <file2>: Check if data in file1 is also in file2\n");
+    printf("    -str <str>: Get data behind <str> in file1\n\n");
+    printf("\nReturn Code: OK(0), ERROR(-1)");
+    textcolor(15);
+    textbackground(1);
+    cprintf("\n\rESC");
+    printf(": exit this help");
+    asus.PrintStr(1,24,"... Press any key to first page ...",0,0x07);
+    if(getch()==0x1B){
+      textbackground(0);
+      cprintf("\r                                                           ");
+      break;
+    }
+  }
+  End(-1);
+}
+//--------------------------------------------------------------------------
+void End(int ReturnCode)
+{
+  char buf[80];
+
+  sprintf(buf,"Return_Code=%d", ReturnCode);
+  asus.PrintStr(1,24,buf,0,0x07);
+  gotoxy(1,24);
+  asus.CursorOn();
+  fcloseall();
+  exit(ReturnCode);
+}
+
+char Code[36]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D',
+		  'E','F','G','H','I','J','K','L','M','N','O','P','Q','R',
+		  'S','T','U','V','W','X','Y','Z'};
+
+int atoh(const char* pStr)
+{
+  int ah = 0;
+  unsigned int sl = strlen(pStr);
+  for(unsigned int p = 0 ; p < sl ; p++){ // p = index and pow
+    for(int pp = 0 ; pp <16 ; pp++){      // pp = number
+      if((pStr[sl - 1 - p]) == Code[pp]) break;
+    }
+    ah = ah + pp * (int) pow(16, p);
+  }
+  return ah;
+}
+
+
+//--------------------------------------------------------------------------
+void main(int argc, char *argv[])
+{
+  FILE  *f1,*f2,*fBar,*f3,*f4,*fBar2,*f7,*f,*ff;
+  int   i,j,ReadBit,ChkTimes=0,Del_Bit=0,k,m,n,p,BitNo=0,value = 0,x,y;
+  //uLong sum=0;
+  char  str[255],*ptr,ch,**iniFile,Prmpt[80]="\0",BarCode[100],s[100],d[80]="\0",
+	str2[100]="\0",szStr[1024],s3[100]="\0",szS[1024]="\0",EnvirVar[80]="\0",str3[80]="\0",sINI1[80]="",
+	str4[50],str5[50];
+
+  Boolean blNologo = FALSE;
+  Boolean blParameterOK=FALSE;
+  Boolean blResultOK=FALSE;
+  Boolean blPrompt=FALSE;
+  Boolean blignore=FALSE;
+  Boolean blCaseSensitive=FALSE;
+
+  // begin handle the user interface
+	for(int a = 0; a < (argc - 1); a++) 
+	{
+		if(stricmp(argv[a+1] , "-c") == 0)
+		{
+			blCaseSensitive=TRUE;
+			continue;
+		}
+
+
+	}
+
+  for(i=0; i<(argc-1); i++) {
+    if(stricmp(argv[i+1], "?")==0  ||\
+       stricmp(argv[i+1], "/?")==0 ||\
+       stricmp(argv[i+1], "/h")==0 ||\
+       stricmp(argv[i+1], "/help")==0) {
+	 blParameterOK=TRUE;
+	 Logo();
+	 ReadMe();
+	 continue;
+    }
+
+    if(stricmp(argv[i+1], "-nologo") ==0){
+      blNologo = TRUE;
+      continue;
+    }
+
+    if (stricmp(argv[i+1] , "/CLS") == 0) {
+      if (argv[i+2] == NULL) break;
+      blParameterOK = TRUE;
+      if(!blNologo) Logo();
+      if (blCheckLines (argv[i+2])) blResultOK = TRUE;
+      break;
+    }
+
+    if (stricmp(argv[i+1] , "-line") == 0) {
+      if (argv[i+2] == NULL) break;
+      blParameterOK = TRUE;
+      nLine = atoi(argv[i+2]);
+      if (nLine == 0) ReadMe();
+      continue;
+    }
+
+    if(stricmp(argv[i+1], "/GMT")==0) {
+      blParameterOK=TRUE;
+      blResultOK=TRUE;
+      if(!blNologo) Logo();
+      printf("%ld\n", dwTransferNowDateTime2GMT());
+      continue;
+    }
+	if(stricmp(argv[i+1], "/CF")==0) {
+	for(int iTe=0;iTe<(argc-1);iTe++)
+	{
+		if(stricmp(argv[iTe+1] , "-diff")==0)
+		{		
+			if(argv[iTe+2]!=NULL)
+			{
+				strcpy(szStr,argv[iTe+2]);
+				blDiff=TRUE;
+			}
+		}
+	}
+      if(!blNologo) Logo();
+      if(argc>(i+3)) {
+	blParameterOK=TRUE;
+	if((f1=fopen(argv[i+2],"r+"))!=NULL) {
+	  char dwValue1[1024];
+	  fscanf(f1, "%s", dwValue1);
+	  fclose(f1);
+	  if((f2=fopen(argv[i+3],"r+"))!=NULL) {
+	    char dwValue2[1024];
+	    fscanf(f2, "%s", dwValue2);
+	    fclose(f2);
+	    cprintf("value in file(%s) = %s\n\r", argv[i+2], dwValue1);
+	    cprintf("value in file(%s) = %s\n\r", argv[i+3], dwValue2);
+		char szTVal1[1024],szTVal2[1024];
+		strcpy(szTVal1,dwValue1);
+		strcpy(szTVal2,dwValue2);
+		for (int im=0;im<strlen(dwValue1);im++)
+		{
+			for(int in=0;in<36;in++)
+			{
+				if(dwValue1[im]==Code[in])
+				{
+					if(in>9)
+					{
+						cprintf("\n\r ERROR !!%s Is Not Dec Data !! ",dwValue1);
+						End(-1);
+					}
+				}
+			}
+		}
+		for (int jm=0;jm<strlen(dwValue2);jm++)
+		{
+			for(int jn=0;jn<36;jn++)
+			{
+				if(dwValue2[jm]==Code[jn])
+				{
+					if(jn>9)
+					{
+						cprintf("\n\r ERROR !! %s Is Not Dec Data !! ",dwValue2);
+						End(-1);
+					}
+				}
+			}
+		}
+
+		int jTmp,kTmp;
+		int ib=0,ic=0;
+		for(int i=0;i<strlen(dwValue1);i++)
+		{
+		    if(dwValue1[i]=='-')
+			{
+				i++;
+				ib=1;
+			}	
+			if(dwValue1[i]!='0')
+			{
+				jTmp=strlen(dwValue1)-i;
+				break;
+			}
+		}
+		char szTmpv1[1024],szTmpv2[1024];
+		for(int iTmp1=0;iTmp1<jTmp;iTmp1++)
+		{
+			szTmpv1[iTmp1]=dwValue1[strlen(dwValue1)-jTmp+iTmp1];
+		}
+		szTmpv1[iTmp1]='\0';
+		strcpy(dwValue1,szTmpv1);
+		for(int ii=0;ii<strlen(dwValue2);ii++)
+		{
+		    if(dwValue2[ii]=='-')
+			{
+				ii++;
+				ic=1;
+			}			
+			if(dwValue2[ii]!='0')
+			{
+				kTmp=strlen(dwValue2)-ii;
+				break;
+			}
+		}
+		for(int iTmp2=0;iTmp2<kTmp;iTmp2++)
+		{
+			szTmpv2[iTmp2]=dwValue2[strlen(dwValue2)-kTmp+iTmp2];
+		}
+		szTmpv2[iTmp2]='\0';
+		strcpy(dwValue2,szTmpv2);
+		if(ib==1&&ic!=1)
+		{
+			cprintf("%s < %s\n", szTVal1, szTVal2);
+			fcloseall();
+			End(1);
+		}
+		if(ib!=1&&ic==1)
+		{
+			cprintf("%s < %s\n", szTVal1, szTVal2);
+			fcloseall();
+			End(1);
+		}
+		if(ib==1&&ic==1||ib==0&&ic==0)
+		{
+			int iS=jTmp<kTmp?jTmp:kTmp;
+			int iU=jTmp>kTmp?jTmp:kTmp;
+			int a=2;
+			if(iS==iU)
+			{
+				for(int iii=0;iii<jTmp;iii++)
+				{
+					if((dwValue1[iii]-'0')-(dwValue2[iii]-'0')>0)
+					{
+						a=1;
+						break;
+					}				
+					if((dwValue1[iii]-'0')-(dwValue2[iii]-'0')<0)
+					{
+						a=-1;
+						break;
+					}
+					if((dwValue1[iii]-'0')-(dwValue2[iii]-'0')==0)
+					{
+						a=0;
+					}	
+				}
+			}
+			char szTemp[1024];
+			int iT=0;
+			for(int iN=iS-1,iV=iU-1;iN>=0;iN--)
+			{
+				if(iS==jTmp&&jTmp!=kTmp||a==-1)
+				{
+					a=-1;
+					if(iT<0)
+					{
+						iT=(dwValue2[iV]-'0')-1-(dwValue1[iN]-'0');
+						if(iT<0)
+							szTemp[iV]=(dwValue2[iV]-'0')-1-(dwValue1[iN]-'0')+10+'0';
+						else
+							szTemp[iV]=(dwValue2[iV]-'0')-1-(dwValue1[iN]-'0')+'0';
+
+					}
+					else
+					{
+						iT=(dwValue2[iV]-'0')-(dwValue1[iN]-'0');
+						if(iT<0)
+							szTemp[iV]=(dwValue2[iV]-'0')-(dwValue1[iN]-'0')+10+'0';
+						else
+							szTemp[iV]=(dwValue2[iV]-'0')-(dwValue1[iN]-'0')+'0';
+					}
+					if(iN==0&&iV>0)
+					{
+						if(iT<0)
+						{
+							iV--;
+							for(;iV>0;iV--)
+							{
+								if(iT<0)
+								{
+									cprintf("%d",iT);
+									iT=(dwValue2[iV]-'0')-1;
+									if(iT<0)
+										szTemp[iV]=iT+10+'0';
+									else
+										szTemp[iV]=iT+'0';
+								}
+								else
+									szTemp[iV]=dwValue2[iV];
+						}
+						}
+						else
+							for(;iV>0;)
+							{
+								iV--;
+								szTemp[iV]=(dwValue2[iV]-'0')+'0';
+						}
+					}
+					szTemp[kTmp]='\0';
+				}
+				if(iS==kTmp&&jTmp!=kTmp||a==1)
+				{
+					if(iT<0)
+					{
+						iT=(dwValue1[iV]-'0')-1-(dwValue2[iN]-'0');
+						if(iT<0)
+							szTemp[iV]=(dwValue1[iV]-'0')-1-(dwValue2[iN]-'0')+10+'0';
+						else
+							szTemp[iV]=(dwValue1[iV]-'0')-1-(dwValue2[iN]-'0')+'0';
+					}
+					else
+					{
+						iT=(dwValue1[iV]-'0')-(dwValue2[iN]-'0');
+						if(iT<0)
+							szTemp[iV]=(dwValue1[iV]-'0')-(dwValue2[iN]-'0')+10+'0';
+						else
+							szTemp[iV]=(dwValue1[iV]-'0')-(dwValue2[iN]-'0')+'0';
+					}
+					if(iN==0&&iV>0)
+					{
+						if(iT<0)
+						{
+							iV--;
+							for(;iV>=0;iV--)
+							{
+								if(iT<0)
+								{
+									iT=(dwValue1[iV]-'0')-1;
+									if(iT<0)
+										szTemp[iV]=iT+10+'0';
+									else
+										szTemp[iV]=iT+'0';
+								}
+								else
+								{
+									szTemp[iV]=dwValue1[iV];
+								}
+						}
+						}
+						else
+							for(;iV>0;)
+							{
+								iV--;
+								szTemp[iV]=(dwValue1[iV]-'0')+'0';
+						}
+					}
+					szTemp[jTmp]='\0';
+				}
+				if(a==0)
+				{
+					szTemp[0]='0';
+					szTemp[1]='\0';
+				}
+			iV--;
+			}
+			if(a==-1) {
+			  int kk = strlen(szTemp);
+			  szTemp[kk+1]='\0';
+			  if(szTemp[0]=='0') szTemp[0]='-';
+			  else{
+			    for(kk=strlen(szTemp) ; kk>0 ; kk--){
+			      szTemp[kk] = szTemp[kk-1];
+			    }
+			    szTemp[0]='-';
+			  }
+			}
+			cprintf("\n");
+		    cprintf("the difference =");
+			printf("%s\n",szTemp);
+			cprintf("\r");
+
+			if(blDiff)
+			{
+				if(((iS==kTmp&&jTmp!=kTmp||a==1)&&ib==0&&ic==0)||((iS==jTmp&&jTmp!=kTmp||a==-1)&&ib==1&&ic==1))
+				{
+					cprintf("%s > %s\n\r", szTVal1, szTVal2);
+					DecCmp(szTemp,szStr);
+				}
+				else if(a==0)
+				{
+					cprintf("%s = %s\n\r",szTVal1, szTVal2);
+					DecCmp(szTemp,szStr);
+				}
+				if(((iS==jTmp&&jTmp!=kTmp||a==-1)&&ib==0&&ic==0)||((iS==kTmp&&jTmp!=kTmp||a==1)&&ib==1&&ic==1))
+				{
+					cprintf("%s < %s\n\r", szTVal1, szTVal2);
+					DecCmp(szTemp,szStr);
+				}
+			}
+			else
+			{
+				if(((iS==kTmp&&jTmp!=kTmp||a==1)&&ib==0&&ic==0)||((iS==jTmp&&jTmp!=kTmp||a==-1)&&ib==1&&ic==1)) 
+				{
+					cprintf("%s > %s\n\r", szTVal1, szTVal2);
+					fcloseall();
+					End(2);
+				}
+				else if(a==0) 
+				{
+					cprintf("%s = %s\n\r",szTVal1, szTVal2);
+					fcloseall();
+					End(1);
+				}
+				if(((iS==jTmp&&jTmp!=kTmp||a==-1)&&ib==0&&ic==0)||((iS==kTmp&&jTmp!=kTmp||a==1)&&ib==1&&ic==1)) 
+				{
+					cprintf("%s < %s\n\r", szTVal1, szTVal2);
+					fcloseall();
+					End(0);
+				}
+			}
+		}
+	  } else cprintf("open %s ERROR...\n\r", argv[i+3]);
+	} else cprintf("open %s ERROR...\n\r", argv[i+2]);
+      }
+      continue;
+    }
+      
+    if(stricmp(argv[i+1], "/CF1")==0) {
+	for(int kTe=0;kTe<(argc-1);kTe++)
+	{
+		if(stricmp(argv[kTe+1] , "-diff")==0)
+		{		
+			if(argv[kTe+2]!=NULL)
+			{
+				strcpy(szStr,argv[kTe+2]);
+				blDiff=TRUE;
+			}
+		}
+	}
+      if(!blNologo) Logo();
+      if(argc>(i+3)) {
+	blParameterOK=TRUE;
+	if((f1=fopen(argv[i+2],"r+"))!=NULL) {
+	  char dwValue1[1024];
+	  fscanf(f1, "%s", dwValue1);
+	  fclose(f1);
+	  if((f2=fopen(argv[i+3],"r+"))!=NULL) {
+	    char dwValue2[1024];
+	    fscanf(f2, "%s", dwValue2);
+	    fclose(f2);
+	    cprintf("value in file(%s) = %s\n\r", argv[i+2], dwValue1);
+	    cprintf("value in file(%s) = %s\n\r", argv[i+3], dwValue2);
+		for(int i=0,jTmp=0;i<strlen(dwValue1);i++)
+		{
+			if(dwValue1[i]!='0')
+			{
+				jTmp=strlen(dwValue1)-i;
+				break;
+			}
+		}
+		char szTmpv1[1024],szTmpv2[1024];
+		for(int iTmp1=0;iTmp1<jTmp;iTmp1++)
+		{
+			szTmpv1[iTmp1]=dwValue1[strlen(dwValue1)-jTmp+iTmp1];
+		}
+		szTmpv1[iTmp1]='\0';
+		strcpy(dwValue1,szTmpv1);
+		for(int ii=0,kTmp=0;ii<strlen(dwValue2);ii++)
+		{
+			if(dwValue2[ii]!='0')
+			{
+				kTmp=strlen(dwValue2)-ii;
+				break;
+			}
+		}
+		for(int iTmp2=0;iTmp2<kTmp;iTmp2++)
+		{
+			szTmpv2[iTmp2]=dwValue2[strlen(dwValue2)-kTmp+iTmp2];
+		}
+		szTmpv2[iTmp2]='\0';
+		strcpy(dwValue2,szTmpv2);
+		int iS=jTmp<kTmp?jTmp:kTmp;
+		int iU=jTmp>kTmp?jTmp:kTmp;
+		int a=2;
+		if(iS==iU)
+		{
+			for(int iii=0;iii<jTmp;iii++)
+			{
+				if((dwValue1[iii]-'0')-(dwValue2[iii]-'0')>0)
+				{
+					a=1;
+					break;
+				}				
+				if((dwValue1[iii]-'0')-(dwValue2[iii]-'0')<0)
+				{
+					a=-1;
+					break;
+				}
+				if((dwValue1[iii]-'0')-(dwValue2[iii]-'0')==0)
+				{
+					a=0;
+				}
+			}
+		}
+		char szTemp[1024];
+		szTemp[0]='\0';
+		char szTstr[10];
+		int iTemp;
+		for(int iN=iS-1,iV=iU-1,iT=0;iN>=0;iN--)
+		{
+			if(iS==jTmp&&jTmp!=kTmp||a==-1)
+			{
+				if(iT<0)
+				{
+					iT=/*(dwValue2[iV]-'0')*/cXtoD(dwValue2,iV)-1-cXtoD(dwValue1,iN);/*(dwValue1[iN]-'0')*/
+					if(iT<0)
+					{
+						sprintf(szTstr,"%X",iT+16);
+						strcat(szTemp,szTstr);
+					}
+					else
+					{
+						sprintf(szTstr,"%X",iT);
+						strcat(szTemp,szTstr);
+					}
+				}
+				else
+				{
+					iT=cXtoD(dwValue2,iV)-cXtoD(dwValue1,iN);
+					if(iT<0)
+					{
+						sprintf(szTstr,"%X",iT+16);
+						strcat(szTemp,szTstr);
+					}
+					else
+					{
+						sprintf(szTstr,"%X",iT);
+						strcat(szTemp,szTstr);
+					}
+				}
+				if(iN==0&&iV>0)
+				{
+					if(iT<0)
+					{
+						iV--;
+						for(;iV>0;iV--)
+						{
+							if(iT<0)
+							{
+								iT=cXtoD(dwValue2,iV)-1;
+								if(iT<0)
+								{
+									sprintf(szTstr,"%X",iT+16);
+									strcat(szTemp,szTstr);
+								}
+								else
+								{
+									sprintf(szTstr,"%X",iT);
+									strcat(szTemp,szTstr);
+								}
+							}
+							else
+							{
+								sprintf(szTstr,"%X",cXtoD(dwValue2,iV));
+								strcat(szTemp,szTstr);
+							}
+	    				}
+					}
+					else
+						for(;iV>0;)
+						{
+							iV--;
+							sprintf(szTstr,"%X",cXtoD(dwValue2,iV));
+							strcat(szTemp,szTstr);
+	    				}
+				}
+			}
+			if(iS==kTmp&&jTmp!=kTmp||a==1)
+			{
+				if(iT<0)
+				{
+					iT=/*(dwValue1[iV]-'0')*/cXtoD(dwValue1,iV)-1-cXtoD(dwValue2,iN);/*(dwValue2[iN]-'0')*/
+					if(iT<0)
+					{
+						sprintf(szTstr,"%X",iT+16);
+						strcat(szTemp,szTstr);
+					}
+					else
+					{
+						sprintf(szTstr,"%X",iT);
+						strcat(szTemp,szTstr);
+					}
+				}
+				else
+				{
+					iT=cXtoD(dwValue1,iV)-cXtoD(dwValue2,iN);
+					if(iT<0)
+					{
+						sprintf(szTstr,"%X",iT+16);
+						strcat(szTemp,szTstr);
+					}
+					else
+					{
+						sprintf(szTstr,"%X",iT);
+						strcat(szTemp,szTstr);
+					}
+				}
+				if(iN==0&&iV>0)
+				{
+					if(iT<0)
+					{
+						iV--;
+						for(;iV>=0;iV--)
+						{
+							if(iT<0)
+							{
+								iT=cXtoD(dwValue1,iV)-1;
+								if(iT<0)
+								{
+									sprintf(szTstr,"%X",iT+16);
+									strcat(szTemp,szTstr);
+								}
+								else
+								{
+									sprintf(szTstr,"%X",iT);
+									strcat(szTemp,szTstr);
+								}
+							}
+							else
+							{
+								sprintf(szTstr,"%X",cXtoD(dwValue1,iV));
+								strcat(szTemp,szTstr);
+							}
+	    				}
+					}
+					else
+						for(;iV>0;)
+						{
+							iV--;
+								sprintf(szTstr,"%X",cXtoD(dwValue1,iV));
+								strcat(szTemp,szTstr);
+	    				}
+				}
+			}
+		iV--;
+		}
+		char szTmpv3[1024];
+		for(int iTmp3=0;iTmp3<strlen(szTemp);iTmp3++)
+		{
+			szTmpv3[iTmp3]=szTemp[strlen(szTemp)-iTmp3-1];
+		}
+		szTmpv3[iTmp3+1]='\0';
+		strcpy(szTemp,szTmpv3);
+		cprintf("\n");
+	    cprintf("the difference = ");
+		printf("%s\n", szTemp);
+		cprintf("\r");
+	    if(blDiff)
+		{
+	      if(iS==kTmp&&jTmp!=kTmp||a==1) 
+		  {
+			cprintf("%s > %s\n\r", dwValue1, dwValue2);
+			HexCmp(szTemp,szStr);
+	      }
+	      else if(a==0)
+		  {
+			cprintf("%s = %s\n\r", dwValue1, dwValue2);
+			HexCmp(szTemp,szStr);
+	      }
+	      else if(iS==jTmp&&jTmp!=kTmp||a==-1) 
+		  {
+			cprintf("%s < %s\n\r", dwValue1, dwValue2);
+			HexCmp(szTemp,szStr);	
+	      }
+	    }
+		else
+		{
+	      if(iS==kTmp&&jTmp!=kTmp||a==1) 
+		  {
+			cprintf("%s > %s\n\r", dwValue1, dwValue2);
+			fcloseall();
+			End(2);
+	      }
+	      else if(a==0)
+		  {
+			cprintf("%s = %s\n\r", dwValue1, dwValue2);
+			fcloseall();
+			End(1);
+	      }
+	      else if(iS==jTmp&&jTmp!=kTmp||a==-1) 
+		  {
+			cprintf("%s < %s\n\r", dwValue1, dwValue2);
+			fcloseall();
+			End(0);
+	      }
+	    } // end of blDiff else
+	  } else cprintf("open %s ERROR...\n\r", argv[i+3]);
+	} else cprintf("open %s ERROR...\n\r", argv[i+2]);
+      }
+      continue;
+    }
+
+ //   if(stricmp(argv[i+1], "/CF1")==0) {
+ //     if(!blNologo) Logo();
+ //     if(argc>(i+3)) {
+	//blParameterOK=TRUE;
+	//if((f1=fopen(argv[i+2],"r+"))!=NULL) {
+	//  uLong dwValue1;
+	//  fscanf(f1, "%lX", &dwValue1);
+	//  fclose(f1);
+	//  if((f2=fopen(argv[i+3],"r+"))!=NULL) {
+	//    uLong dwValue2;
+	//    fscanf(f2, "%lX", &dwValue2);
+	//    fclose(f2);
+	//    cprintf("value in file(%s) = %lX\n\r", argv[i+2], dwValue1);
+	//    cprintf("value in file(%s) = %lX\n\r", argv[i+3], dwValue2);
+	//    cprintf("the difference = ");
+	//    if(dwValue1 >= dwValue2) printf("%ld\n", dwValue1-dwValue2);
+	//    else printf("%ld\n", dwValue2-dwValue1);
+	//    if(blDiff){
+	//      cprintf("Value in Difference range = %d\n\r", (int)nDiffValue);
+	//      int SubValue = abs((int) dwValue1 - (int) dwValue2);
+	//      if(SubValue > (int) nDiffValue){
+	//	cprintf(" the Difference in %lX and %lX is %d > %d\n\r",
+	//	  dwValue1, dwValue2, SubValue, (int)nDiffValue);
+	//	fcloseall();
+	//	End(2);
+	//      }else if(SubValue == (int) nDiffValue){
+	//	cprintf(" the Difference in %lX and %lX is %d = %d\n\r",
+	//	  dwValue1, dwValue2, SubValue, (int)nDiffValue);
+	//	fcloseall();
+	//	End(1);
+	//      }else if(SubValue < (int) nDiffValue){
+	//	cprintf(" the Difference in %lX and %lX is %d < %d\n\r",
+	//	  dwValue1, dwValue2, SubValue, (int)nDiffValue);
+	//	fcloseall();
+	//	End(0);
+	//      }
+	//    }else{
+	//      if(dwValue1>dwValue2) {
+	//	cprintf("%lX > %lX\n\r", dwValue1, dwValue2);
+	//	fcloseall();
+	//	End(2);
+	//      }
+	//      if(dwValue1==dwValue2) {
+	//	cprintf("%lX = %lX\n\r", dwValue1, dwValue2);
+	//	fcloseall();
+	//	End(1);
+	//      }
+	//      if(dwValue1<dwValue2) {
+	//	cprintf("%lX < %lX\n\r", dwValue1, dwValue2);
+	//	fcloseall();
+	//	End(0);
+	//      }
+	//    }
+	//  } else cprintf("open %s ERROR...\n\r", argv[i+3]);
+	//} else cprintf("open %s ERROR...\n\r", argv[i+2]);
+ //     }
+ //     continue;
+ //   }
+    if(stricmp(argv[i+1], "/CV")==0) {
+      if(!blNologo) Logo();
+      if(argc>(i+3)) {
+	blParameterOK=TRUE;
+	p=0;
+	int m1 = 0,
+	    n1 = 0,
+	    sub = 0;
+	Boolean blHex = FALSE;
+	if((f1=fopen(argv[i+2],"r+"))!=NULL) {
+	/*uLong dwValue1; //edit by KC
+	  fscanf(f1, "%ld", &dwValue1);
+	  fclose(f1);
+	  uLong dwValue2=atol(argv[i+3]);
+	  cprintf("value in file(%s) = %ld\n\r", argv[i+2], dwValue1);
+	  cprintf("value in parameter = %ld\n\r", dwValue2);
+	  if(dwValue1>dwValue2) {
+	    cprintf("%ld > %ld\n\r", dwValue1, dwValue2);
+	    fcloseall();
+	    End(2);
+	  }
+	  if(dwValue1==dwValue2) {
+	    cprintf("%ld = %ld\n\r", dwValue1, dwValue2);
+	    fcloseall();
+	    End(1);
+	  }
+	  if(dwValue1<dwValue2) {
+	    cprintf("%ld <% ld\n\r", dwValue1, dwValue2);
+	    fcloseall();
+	    End(0);
+	  }*/
+	  fgets(s,100,f1);//add by Jackson, 2003-08-15
+	  strcpy(s3,argv[i+3]);
+	  strcpy(szS,argv[i+2]);
+	  for(j=0;j<strlen(s);j++){
+	    if(s[j]==' ' || s[j]=='\n'){
+	      s[j]='\0';
+	      break;
+	    }
+	    s[j]=toupper(s[j]);
+	  }
+		for(int i=0,jTmp=0;i<strlen(s3);i++)
+		{
+			if(s3[i]!='0')
+			{
+				jTmp=strlen(s3)-i;
+				break;
+			}
+		}
+		char szTmpv1[1024],szTmpv2[1024];
+		for(int iTmp1=0;iTmp1<jTmp;iTmp1++)
+		{
+			szTmpv1[iTmp1]=s3[strlen(s3)-jTmp+iTmp1];
+		}
+		szTmpv1[iTmp1]='\0';
+		strcpy(s3,szTmpv1);
+		for(int ii=0,kTmp=0;ii<strlen(s);ii++)
+		{
+			if(s[ii]!='0')
+			{
+				kTmp=strlen(s)-ii;
+				break;
+			}
+		}
+		for(int iTmp2=0;iTmp2<kTmp;iTmp2++)
+		{
+			szTmpv2[iTmp2]=s[strlen(s)-kTmp+iTmp2];
+		}
+		szTmpv2[iTmp2]='\0';
+		strcpy(s,szTmpv2);
+	  for(j=0;j<jTmp;j++) s3[j]=toupper(s3[j]);
+	  for(j=0;j<kTmp;j++){
+	    for(m=0;m<36;m++)
+	      if(s[j]==Code[m]) break;
+	    if(m>15){
+	      textcolor(15);
+	      textbackground(4);
+	      cprintf("\n\r ERROR !! %s='%s' Is Not Hex Data !! ",argv[i+2],s);
+	      fcloseall();
+	      End(-1);
+	    }
+	    if(m > -1 && m < 16) blHex = TRUE;
+	  }
+	  for(j=0;j<jTmp;j++){
+	    for(n=0;n<36;n++)
+	      if(s3[j]==Code[n]) break;
+	    if(n>15){
+	      textcolor(15);
+	      textbackground(4);
+	      cprintf("\n\r ERROR !! '%s' Is Not Hex Data !! ",s3);
+	      fcloseall();
+	      End(-1);
+	    }
+	    if( n > -1 && n < 16) blHex = TRUE;
+	  }
+	  if(kTmp==jTmp){
+	    for(j=0;j<kTmp;j++){
+	      for(m=0;m<36;m++)
+		if(s[j]==Code[m]) break;
+	      for(n=0;n<36;n++)
+		if(s3[j]==Code[n]) break;
+	      if(blDiff){
+		if(blHex){
+		  m1 = atoh(s); n1 = atoh(s3);
+		}else{
+		  m1 = atoi(s); n1 = atoi(s3);
+		}
+		sub = abs(m1-n1);
+		if(sub > (int) nDiffValue){
+		  value = 2;
+		  break;
+		}else if(sub == (int) nDiffValue){
+		  value = 1;
+		  break;
+		}else if(sub < (int) nDiffValue){
+		  value = 0;
+		  break;
+		}
+	      }else{
+		if(m>n){
+		  value=2;
+		  break;
+		}
+		else if(m<n){
+		  value=0;
+		  break;
+		}
+		else if(m==n){
+		  p++;
+		  if(p<strlen(s)) continue;
+		  value=1;
+		}
+	      }
+	    }
+	  }
+	  else if(kTmp>jTmp){
+	    if(blDiff){
+	      if(blHex){
+		m1 = atoh(s); n1 = atoh(s3);
+	      }else{
+		m1 = atoi(s); n1 = atoi(s3);
+	      }
+	      sub = abs(m1-n1);
+	      if(sub > (int) nDiffValue) value = 2;
+	      else if(sub == (int) nDiffValue) value = 1;
+	      else if(sub < (int) nDiffValue) value = 0;
+	    }else value=2;
+	  }
+	  else if(kTmp<jTmp){
+	    if(blDiff){
+	      if(blHex){
+		m1 = atoh(s); n1 = atoh(s3);
+	      }else{
+		m1 = atoi(s); n1 = atoi(s3);
+	      }
+	      sub = abs(m1 - n1);
+	      if(sub > (int) nDiffValue) value = 2;
+	      else if(sub == (int) nDiffValue) value = 1;
+	      else if(sub < (int) nDiffValue) value = 0;
+	    }else value=0;
+	  }
+
+	  if(value==2) {
+	    cprintf("value in file(%s) = %s\n\r",szS,s);
+	    cprintf("value in parameter = %s\n\r",s3);
+	    if(blDiff)
+	      cprintf("value in Difference = %d\n\r", (int) nDiffValue);
+	    textcolor(15);
+	    textbackground(1);
+	    if(blDiff)
+	      cprintf("the Difference in %s and %s is %d > %d\n\r", s, s3,
+		  sub, (int)nDiffValue);
+	    else cprintf("%s > %s\n\r",s,s3);
+	    fcloseall();
+	    End(2);
+	  }
+	  if(value==1) {
+	    cprintf("value in file(%s) = %s\n\r",szS,s);
+	    //cprintf("value in file(%s) = %s\n\r",argv[i+2],s);
+	    cprintf("value in parameter = %s\n\r",s3);
+	    if(blDiff)
+	      cprintf("value in Difference = %d\n\r", (int) nDiffValue);
+	    textcolor(15);
+	    textbackground(1);
+	    if(blDiff)
+	      cprintf("the Difference in %s and %s is %d = %d\n\r", s, s3,
+		  sub, (int)nDiffValue);
+	    else cprintf("%s = %s\n\r",s,s3);
+	    fcloseall();
+	    End(1);
+	  }
+	  if(value==0) {
+	    cprintf("value in file(%s) = %s\n\r",szS,s);
+	    //cprintf("value in file(%s) = %s\n\r",argv[i+2],s);
+	    cprintf("value in parameter = %s\n\r",s3);
+	    if(blDiff)
+	      cprintf("value in Difference = %d\n\r", (int) nDiffValue);
+	    textcolor(15);
+	    textbackground(1);
+	    if(blDiff)
+	      cprintf("the Difference in %s and %s is %d < %d\n\r", s, s3,
+		  sub, (int)nDiffValue);
+	    else cprintf("%s < %s\n\r",s,s3);
+	    fcloseall();
+	    End(0);
+	  }
+	}
+	else{
+	  textcolor(15);
+	  textbackground(4);
+	  cprintf("\n ERROR !! Can't Open '%s' !! \n\r",argv[i+2]);
+	  fcloseall();
+	  End(-1);
+	}
+      }
+      continue;
+    }
+ //   if(stricmp(argv[i+1], "/CV")==0) {
+ //     if(!blNologo) Logo();
+ //     if(argc>(i+3)) {
+	//blParameterOK=TRUE;
+	//p=0;
+	//int m1 = 0,
+	//    n1 = 0,
+	//    sub = 0;
+	//Boolean blHex = FALSE;
+	//if((f1=fopen(argv[i+2],"r+"))!=NULL) {
+	///*uLong dwValue1; //edit by KC
+	//  fscanf(f1, "%ld", &dwValue1);
+	//  fclose(f1);
+	//  uLong dwValue2=atol(argv[i+3]);
+	//  cprintf("value in file(%s) = %ld\n\r", argv[i+2], dwValue1);
+	//  cprintf("value in parameter = %ld\n\r", dwValue2);
+	//  if(dwValue1>dwValue2) {
+	//    cprintf("%ld > %ld\n\r", dwValue1, dwValue2);
+	//    fcloseall();
+	//    End(2);
+	//  }
+	//  if(dwValue1==dwValue2) {
+	//    cprintf("%ld = %ld\n\r", dwValue1, dwValue2);
+	//    fcloseall();
+	//    End(1);
+	//  }
+	//  if(dwValue1<dwValue2) {
+	//    cprintf("%ld <% ld\n\r", dwValue1, dwValue2);
+	//    fcloseall();
+	//    End(0);
+	//  }*/
+	//  fgets(s,100,f1);//add by Jackson, 2003-08-15
+	//  strcpy(s3,argv[i+3]);
+	//  for(j=0;j<strlen(s);j++){
+	//    if(s[j]==' ' || s[j]=='\n'){
+	//      s[j]='\0';
+	//      break;
+	//    }
+	//    s[j]=toupper(s[j]);
+	//  }
+	//  for(j=0;j<strlen(s3);j++) s3[j]=toupper(s3[j]);
+	//  for(j=0;j<strlen(s);j++){
+	//    for(m=0;m<36;m++)
+	//      if(s[j]==Code[m]) break;
+	//    if(m>15){
+	//      textcolor(15);
+	//      textbackground(4);
+	//      cprintf("\n\r ERROR !! %s='%s' Is Not Hex Data !! ",argv[i+2],s);
+	//      fcloseall();
+	//      End(-1);
+	//    }
+	//    if(m > 9 && m < 16) blHex = TRUE;
+	//  }
+	//  for(j=0;j<strlen(s3);j++){
+	//    for(n=0;n<36;n++)
+	//      if(s3[j]==Code[n]) break;
+	//    if(n>15){
+	//      textcolor(15);
+	//      textbackground(4);
+	//      cprintf("\n\r ERROR !! '%s' Is Not Hex Data !! ",s3);
+	//      fcloseall();
+	//      End(-1);
+	//    }
+	//    if( n > 9 && n < 16) blHex = TRUE;
+	//  }
+	//  if(strlen(s)==strlen(s3)){
+	//    for(j=0;j<strlen(s);j++){
+	//      for(m=0;m<36;m++)
+	//	if(s[j]==Code[m]) break;
+	//      for(n=0;n<36;n++)
+	//	if(s3[j]==Code[n]) break;
+	//      if(blDiff){
+	//	if(blHex){
+	//	  m1 = atoh(s); n1 = atoh(s3);
+	//	}else{
+	//	  m1 = atoi(s); n1 = atoi(s3);
+	//	}
+	//	sub = abs(m1-n1);
+	//	if(sub > (int) nDiffValue){
+	//	  value = 2;
+	//	  break;
+	//	}else if(sub == (int) nDiffValue){
+	//	  value = 1;
+	//	  break;
+	//	}else if(sub < (int) nDiffValue){
+	//	  value = 0;
+	//	  break;
+	//	}
+	//      }else{
+	//	if(m>n){
+	//	  value=2;
+	//	  break;
+	//	}
+	//	else if(m<n){
+	//	  value=0;
+	//	  break;
+	//	}
+	//	else if(m==n){
+	//	  p++;
+	//	  if(p<strlen(s)) continue;
+	//	  value=1;
+	//	}
+	//      }
+	//    }
+	//  }
+	//  else if(strlen(s)>strlen(s3)){
+	//    if(blDiff){
+	//      if(blHex){
+	//	m1 = atoh(s); n1 = atoh(s3);
+	//      }else{
+	//	m1 = atoi(s); n1 = atoi(s3);
+	//      }
+	//      sub = abs(m1-n1);
+	//      if(sub > (int) nDiffValue) value = 2;
+	//      else if(sub == (int) nDiffValue) value = 1;
+	//      else if(sub < (int) nDiffValue) value = 0;
+	//    }else value=2;
+	//  }
+	//  else if(strlen(s)<strlen(s3)){
+	//    if(blDiff){
+	//      if(blHex){
+	//	m1 = atoh(s); n1 = atoh(s3);
+	//      }else{
+	//	m1 = atoi(s); n1 = atoi(s3);
+	//      }
+	//      sub = abs(m1 - n1);
+	//      if(sub > (int) nDiffValue) value = 2;
+	//      else if(sub == (int) nDiffValue) value = 1;
+	//      else if(sub < (int) nDiffValue) value = 0;
+	//    }else value=0;
+	//  }
+
+
+	//  if(value==2) {
+	//    cprintf("value in file(%s) = %s\n\r",argv[i+2],s);
+	//    cprintf("value in parameter = %s\n\r",s3);
+	//    if(blDiff)
+	//      cprintf("value in Difference = %d\n\r", (int) nDiffValue);
+	//    textcolor(15);
+	//    textbackground(1);
+	//    if(blDiff)
+	//      cprintf("the Difference in %s and %s is %d > %d\n\r", s, s3,
+	//	  sub, (int)nDiffValue);
+	//    else cprintf("%s > %s\n\r",s,s3);
+	//    fcloseall();
+	//    End(2);
+	//  }
+	//  if(value==1) {
+	//    cprintf("value in file(%s) = %s\n\r",argv[i+2],s);
+	//    cprintf("value in parameter = %s\n\r",s3);
+	//    if(blDiff)
+	//      cprintf("value in Difference = %d\n\r", (int) nDiffValue);
+	//    textcolor(15);
+	//    textbackground(1);
+	//    if(blDiff)
+	//      cprintf("the Difference in %s and %s is %d = %d\n\r", s, s3,
+	//	  sub, (int)nDiffValue);
+	//    else cprintf("%s = %s\n\r",s,s3);
+	//    fcloseall();
+	//    End(1);
+	//  }
+	//  if(value==0) {
+	//    cprintf("value in file(%s) = %s\n\r",argv[i+2],s);
+	//    cprintf("value in parameter = %s\n\r",s3);
+	//    if(blDiff)
+	//      cprintf("value in Difference = %d\n\r", (int) nDiffValue);
+	//    textcolor(15);
+	//    textbackground(1);
+	//    if(blDiff)
+	//      cprintf("the Difference in %s and %s is %d < %d\n\r", s, s3,
+	//	  sub, (int)nDiffValue);
+	//    else cprintf("%s < %s\n\r",s,s3);
+	//    fcloseall();
+	//    End(0);
+	//  }
+	//}
+	//else{
+	//  textcolor(15);
+	//  textbackground(4);
+	//  cprintf("\n ERROR !! Can't Open '%s' !! \n\r",argv[i+2]);
+	//  fcloseall();
+	//  End(-1);
+	//}
+ //     }
+ //     continue;
+ //   }
+    if(stricmp(argv[i+1], "/CV1") == 0) {
+      char chFileValue[100] = {"\0"};
+      char chFileNumber[100] = {"\0"};
+      //char *pStrEnd;
+      int n2e = 0, j= 0;
+      float nFileValue = 0.0,
+	    nCompareValue = 0.0,
+	    nSubValue = 0.0;
+
+      if(!blNologo) Logo();
+      if(argc > (i+3)){
+	blParameterOK = TRUE;
+	if((f1 = fopen(argv[i+2], "r+")) != NULL){
+	  fgets(chFileValue, 100, f1);
+	  for(j ; j < 100 ; j++){
+	    if(chFileValue[j] == 0x00 || chFileValue[j] == 0x20) break;
+	    chFileNumber[j] = chFileValue[j];
+	  }
+	  for(k ; k < strlen(chFileNumber)-1 ; k++){
+	    if(chFileNumber[k] == 0x2e){
+	      n2e++;
+	      if(n2e > 1){
+		textcolor(15);
+		textbackground(4);
+		cprintf("\n\r ERROR 0x2E !! %s = '%s' %d Is Not Numeral Data", argv[i+2], chFileValue, k);
+		End(-1);
+	      }
+	      continue;
+	    }else if(!isdigit(chFileNumber[k])){
+	      textcolor(15);
+	      textbackground(4);
+	      cprintf("\n\r ERROR !! %s = '%s' %d Is Not Numeral Data", argv[i+2], chFileValue, k);
+	      End(-1);
+	    }
+	  }
+	  //nFileValue = strtod(chFileNumber, &pStrEnd);
+	  nFileValue = (float) atof(chFileNumber);
+	  // check input value
+	  for(int a = 0 ; a < strlen(argv[i+3]) ; a++){
+	    if(!isdigit(argv[i+3][a]) && argv[i+3][a] != 0x2e){
+	      textcolor(15);
+	      textbackground(4);
+	      cprintf("\n\r ERROR !! The inputed %s Is Not Numeral Data", argv[i+3]);
+	      End(-1);
+	    }
+	  }
+	  //nCompareValue = strtod(argv[i+3], &pStrEnd);
+	  nCompareValue = (float) atof(argv[i+3]);
+	  cprintf("Value in File(%s) = %s \n\r", argv[i+2], chFileNumber);
+	  cprintf("Value in Parameter = %4.3f \n\r", nCompareValue);
+	  if(blDiff){
+	    cprintf("Value in Difference %4.3f\n\r", nDiffValue);
+	    nSubValue = (float) fabs(nFileValue - nCompareValue);
+	    if((float)fabs(nSubValue - nDiffValue) <=0.0009){
+	      textcolor(15);
+	      textbackground(1);
+	      cprintf("the Difference in %4.3f and %4.3f is %4.3f = %4.3f\n\r",
+		nFileValue, nCompareValue, nSubValue, nDiffValue);
+	      End(1);
+	    }else if(nSubValue > nDiffValue){
+	      textcolor(15);
+	      textbackground(1);
+	      cprintf("the Difference in %4.3f and %4.3f is %4.3f > %4.3f\n\r",
+		nFileValue, nCompareValue, nSubValue, nDiffValue);
+	      End(2);
+
+	    }else if(nSubValue < nDiffValue){
+	      textcolor(15);
+	      textbackground(1);
+	      cprintf("the Difference in %4.3f and %4.3f is %4.3f < %4.3f\n\r",
+		nFileValue, nCompareValue, nSubValue, nDiffValue);
+	      End(0);
+	    }
+	    fcloseall();
+	  }else{
+	    if(nFileValue > nCompareValue){
+	      textcolor(15);
+	      textbackground(1);
+	      cprintf("%f > %f\n\r", nFileValue, nCompareValue);
+	      End(2);
+	    }
+	    else if(nFileValue < nCompareValue){
+	      textcolor(15);
+	      textbackground(1);
+	      cprintf("%f < %f\n\r", nFileValue, nCompareValue);
+	      End(0);
+	    }
+	    else if(nFileValue == nCompareValue){
+	      textcolor(15);
+	      textbackground(1);
+	      cprintf("%f = %f\n\r", nFileValue, nCompareValue);
+	      End(1);
+	    }
+	    fcloseall();
+	  }
+	}
+	else{
+	  textcolor(15);
+	  textbackground(4);
+	  cprintf("\n ERROR !! Can't Open %s !!\n\r", argv[i+2]);
+	  fcloseall();
+	  End(-1);
+
+	}
+      }
+      continue;
+    }
+/*    if(stricmp(argv[i+1], "/CH")==0) {
+      uLong int  Value1,Value2;
+      uLong char Value3[10];
+      uLong char *Value4=argv[i+3];
+      Logo();
+
+      if(argc>(i+3)) {
+	blParameterOK=TRUE;
+	if((f1=fopen(argv[i+2],"r+"))!=NULL) {
+	  fgets(Value3,10,f1);
+	  fclose(f1);
+	  sscanf(Value3,"%x",&Value1);
+	  sscanf(argv[i+3],"%x",&Value2);
+	  for(j=0;j<strlen(Value3);j++){
+	    if(Value3[j]=='\n'){
+	      Value3[j]='\0';
+	      break;
+	    }
+	  }
+	  printf("value in file(%s) = %s\n", argv[i+2], Value3);
+	  printf("value in parameter = %s\n", Value4);
+	  if(Value1>Value2) {
+	    printf("%s > %s\n", Value3, Value4);
+	    fcloseall();
+	    End(2);
+	  }
+	  if(Value1==Value2) {
+	    printf("%s = %s\n", Value3, Value4);
+	    fcloseall();
+	    End(1);
+	  }
+	  if(Value1<Value2) {
+	    printf("%s < %s\n", Value3, Value4);
+	    fcloseall();
+	    End(0);
+	  }
+	}
+      }
+      continue;
+    }*/
+    if(stricmp(argv[i+1], "/FS")==0) {
+      if(!blNologo) Logo();
+      if(argc>(i+2)) {
+	blParameterOK=TRUE;
+	uLong dwValue1, dwValue2;
+
+	dwValue1=dwGetFileSize(argv[i+2]);
+	dwValue2=atol(argv[i+3]);
+
+	cprintf("size of file(%s) = %ld\n\r", argv[i+2], dwValue1);
+	if(argc>(i+3)) {
+	  cprintf("value in parameter = %ld\n\r", dwValue2);
+	  if(dwValue1>dwValue2) {
+	    cprintf("%ld > %ld\n\r", dwValue1, dwValue2);
+	    End(2);
+	  }
+	  if(dwValue1==dwValue2) {
+	    cprintf("%ld = %ld\n\r", dwValue1, dwValue2);
+	    End(1);
+	  }
+	  if(dwValue1<dwValue2) {
+	    cprintf("%ld <% ld\n\r", dwValue1, dwValue2);
+	    End(0);
+	  }
+	} else End(-1);
+      }
+      continue;
+    }
+    if(stricmp(argv[i+1], "/D")==0) {
+      blParameterOK=TRUE;
+      if(argc==(i+3)) {
+	asus.cls();
+	DisplayTxtFile(argv[i+2], 1, 1, 0x07);
+      } else if(argc==(i+5)) {
+	int x, y;
+	x=atoi(argv[i+3]); if(x<1 || x>80) x=1;
+	y=atoi(argv[i+4]); if(y<1 || y>24) y=1;
+	DisplayTxtFile(argv[i+2], x, y, 0x07);
+      } else if(argc==(i+6)) {
+	int x, y;
+	uChar attr;
+	x=atoi(argv[i+3]); if(x<1 || x>80) x=1;
+	y=atoi(argv[i+4]); if(y<1 || y>24) y=1;
+	attr=asus.atoh(argv[i+5]);
+	DisplayTxtFile(argv[i+2], x, y, attr);
+      } else break;
+      gotoxy(1,24);
+      exit(-1);
+    }
+    if(stricmp(argv[i+1], "-diff") == 0){
+      blDiff = TRUE;
+      nDiffValue = (float) atof(argv[i+2]);
+      continue;
+    }
+    if(stricmp(argv[i+1], "-SA")==0) {
+      blUseAddress=TRUE;
+      blUseStartAddress=TRUE;
+      dwStartAddress=atol(argv[i+2])-1;
+      continue;
+    }
+    if(stricmp(argv[i+1], "-EA")==0) {
+      blUseAddress=TRUE;
+      blUseEndAddress=TRUE;
+      dwEndAddress=atol(argv[i+2])-1;
+      continue;
+    }
+    if(stricmp(argv[i+1], "-SL")==0) {
+      blUseLine=TRUE;
+      blUseStartLine=TRUE;
+      dwStartLine=atol(argv[i+2])-1;
+      continue;
+    }
+    if(stricmp(argv[i+1], "-EL")==0) {
+      blUseLine=TRUE;
+      blUseEndLine=TRUE;
+      dwEndLine=atol(argv[i+2])-1;
+      continue;
+    }
+    if(stricmp(argv[i+1], "/C")==0) {
+      if(!blNologo) Logo();
+      if(blFileCompare(argv[i+2], argv[i+3], blignore)) End(0);
+      End(-1);
+    }
+    if(stricmp(argv[i+1], "-i")==0) {
+      blignore=TRUE;
+      continue;
+    }
+    if(stricmp(argv[i+1], "/CSum")==0) {
+      if(!blNologo) Logo();
+      if(blFileCheckSum(argv[i+2], asus.atoh(argv[i+3]))) End(0);
+      End(-1);
+    }
+    if(stricmp(argv[i+1], "-d36")==0) {
+      blDivideBy36=TRUE;
+      continue;
+    }
+    if(stricmp(argv[i+1], "-ChkBC")==0) {
+      ChkTimes=atoi(argv[i+2]);
+      if(ChkTimes<2){
+	printf("\n ERROR !! N Must >= 2 !!\n");
+	End(-1);
+      }
+      blParameterOK=TRUE;
+      continue;
+    }
+    if(stricmp(argv[i+1], "-DEL")==0) {
+      Del_Bit=atoi(argv[i+2]);
+      blParameterOK=TRUE;
+      continue;
+    }
+    if(stricmp(argv[i+1], "-P")==0) {
+      blPrompt=TRUE;
+      blParameterOK=TRUE;
+      strcpy(Prmpt,argv[i+2]);
+      continue;
+    }
+    if(stricmp(argv[i+1], "-T")==0) {
+      blTransfer=TRUE;
+      blParameterOK=TRUE;
+      continue;
+    }
+    if(stricmp(argv[i+1], "/CB")==0) {
+      if(!blNologo) Logo();
+      if((iniFile=(char **)malloc(225))==NULL){
+	printf("ERROR !! Not Enough Memory to Allocate Buffer !!\n");
+	End(-1);
+      }
+      if(argc>(i+2)) blParameterOK=TRUE;
+      else ReadMe();
+      for(j=0;j<argc-i-2;j++) iniFile[j]=argv[i+2+j];
+      if(Process_ini_File(Del_Bit,ChkTimes,j,iniFile,Prmpt)) blResultOK=TRUE;
+      free(iniFile);
+    }
+    if(stricmp(argv[i+1], "/CBC")==0) {
+      if(!blNologo) Logo();
+      if((iniFile=(char **)malloc(225))==NULL){
+	printf("ERROR !! Not Enough Memory to Allocate Buffer !!\n");
+	End(-1);
+      }
+      if(argc>(i+2)) blParameterOK=TRUE;
+      else ReadMe();
+      for(j=0;j<argc-i-2;j++) iniFile[j]=argv[i+2+j];
+      if(Process_ini_File2(Del_Bit,j,iniFile)) blResultOK=TRUE;
+      free(iniFile);
+    }
+    if(stricmp(argv[i+1], "/ChkChar")==0) {
+      if(!blNologo) Logo();
+      ReadBit=atoi(argv[i+3]);
+      ch=*argv[i+4];
+      blParameterOK=TRUE;
+      if(CheckChar(argv[i+2],ReadBit,ch)) blResultOK=TRUE;
+    }
+    if(stricmp(argv[i+1], "/TBC")==0) {
+      if(!blNologo) Logo();
+      blParameterOK=TRUE;
+      if(Transfer_Barcode_Format(Prmpt)) blResultOK=TRUE;
+    }
+    if(stricmp(argv[i+1], "/S")==0) {
+      if(!blNologo) Logo();
+      blParameterOK=TRUE;
+      if((fBar=fopen("barcode.dat","w"))==NULL) {
+	cprintf("\n ERROR !! Can't Open Barcode.dat !!\n\r");
+	fcloseall();
+	End(-1);
+      }
+      if(blPrompt) printf(" %s : ",Prmpt);
+      else printf(" Please Scan Barcode : ");
+      asus.CursorOn();
+      scanf("%s",BarCode);
+      for(j=0;j<strlen(BarCode);j++) BarCode[j]=toupper(BarCode[j]);
+      fprintf(fBar,"%s",BarCode);
+      fclose(fBar);
+      blResultOK=TRUE;
+    }
+    if(stricmp(argv[i+1], "/ChkStr")==0) {
+      char  s1[260]="", s4[260]="";
+      if(!blNologo) Logo();
+      if(!blUseAddress) ReadMe();
+      blParameterOK=TRUE;
+      if((f3=fopen(argv[i+2],"r"))==NULL){
+	cprintf("\n ERROR !! %s Not Found !!\n\r",argv[i+2]);
+	fcloseall();
+	End(-1);
+      }
+      if(blTransfer){
+	sprintf(sINI1, "III.iii");
+	CP(argv[i+2], sINI1);
+	fclose(f3);
+	if((f3=fopen("III.iii","r"))==NULL){
+	  cprintf("\n ... ERROR !! ... III.iii Not Found !! ... \n\r");
+	  fcloseall();
+	  End(-1);
+	}
+      }
+      strcpy(str2,argv[i+3]);
+      if(blUseStartLine && blUseEndLine && (dwStartLine==dwStartLine))
+	for(k=0;k<dwStartLine+1;k++) fgets(s1,260,f3);
+      else fgets(s1,260,f3);
+      for(k=0;k<strlen(s1);k++){
+	s1[k]=toupper(s1[k]);
+	str2[k]=toupper(str2[k]);
+      }
+      if(strlen(str2)==0) ReadMe();
+      k=0;
+      for(j=dwStartAddress;j<=dwEndAddress;j++){
+	s4[k]=s1[j];
+	k++;
+	if(j==dwEndAddress+1) s4[k]='\0';
+      }
+      if(stricmp(s4,str2)==0){
+	printf("\n  Find Data = %s",s4);
+	printf("\n Check Data = %s\n",str2);
+	cprintf("\n Compare OK !!\n\r");
+	blResultOK=TRUE;
+      }
+      else{
+	printf("\n  Find Data = %s",s4);
+	printf("\n Check Data = %s\n",str2);
+	cprintf("\n Compare Error !!\n\r");
+	fcloseall();
+	End(-1);
+      }
+    }
+    if(stricmp(argv[i+1], "/Find")==0) {
+      char  s1[260]="";
+      blParameterOK=TRUE;
+      if(!blNologo) Logo();
+      if((f3=fopen(argv[i+2],"r"))==NULL){
+	cprintf("\n ERROR !! %s Not Found !!\n\r",argv[i+2]);
+	fcloseall();
+	End(-1);
+      }
+      if(blTransfer){
+	sprintf(sINI1, "III.iii");
+	CP(argv[i+2], sINI1);
+	fclose(f3);
+	if((f3=fopen("III.iii","r"))==NULL){
+	  cprintf("\n ... ERROR !! ... III.iii Not Found !! ... \n\r");
+	  fcloseall();
+	  End(-1);
+	}
+      }
+      strcpy(str2,argv[i+3]);
+	  if (blCaseSensitive==FALSE)
+	  {
+		for(k=0;k<strlen(str2);k++) str2[k]=toupper(str2[k]);
+	  }
+      printf("\nSearch Data = %s\n\n",str2);
+      printf("The Result Is : \n");
+
+      int Line=0;
+      while(!feof(f3)){
+	Line++;
+	fgets(s1,260,f3);
+	if (blCaseSensitive==FALSE)
+	{
+		for(k=0;k<strlen(s1);k++) s1[k]=toupper(s1[k]);
+	}
+	if(strlen(str2)==0) ReadMe();
+	if(strstr(s1, str2) != NULL){
+	  printf("Line %d = %s",Line,s1);
+	  blResultOK=TRUE;
+	}
+      }
+    }
+    if(stricmp(argv[i+1], "/BigWord") == 0){
+      if(!blNologo) Logo();
+      if(argv[i+2] == NULL) ReadMe();
+      blParameterOK = TRUE;
+      if(!blDisplayBigWord(argv[i+2])) End(-1);
+      blResultOK = TRUE;
+      break;
+    }
+    if(stricmp(argv[i+1], "/H2D")==0)
+	{
+      if(!blNologo) Logo();
+		if(argc>(i+2)) 
+		{
+			blParameterOK=TRUE;
+			if((f=fopen(argv[i+2],"r+"))!=NULL)
+			{
+				fscanf(f, "%s", s);
+				fclose(f);
+				cprintf("Value in file = %s\n",s);
+				char szTempi[10],szTemp1[4096];
+				szTemp1[0]='\0';
+				for(int i1=0;i1<strlen(s);i1++)
+				{					
+					itoa(cXtoD(s,i1),szTempi,2);
+					int iTz=4-strlen(szTempi);
+					for(int iZn=0;iZn<iTz;iZn++)
+					{
+						char szZ[2]="0";
+						strcat(szTemp1,szZ);
+					}
+					strcat(szTemp1,szTempi);
+				}
+				//cprintf("%s\n",szTemp1);
+				char szTemp2[4096],szTemp3[4096];
+				szTemp2[0]=szTemp1[0];
+				szTemp2[1]='\0';
+				int j2=strlen(szTemp1);
+				for(int i2=1;i2<j2;i2++)
+				{
+					int iTemp1=0,iTemp2=0;
+					for(int i4=0;i4<strlen(szTemp2);i4++)
+					{
+						if(iTemp1>=10)
+						{
+							iTemp1=(cXtoD(szTemp2,i4))*2+1;
+							if(iTemp1>=10)
+								szTemp2[i4]=iTemp1-10+'0';
+							else
+								szTemp2[i4]=iTemp1+'0';
+						}
+						else
+						{
+							iTemp1=cXtoD(szTemp2,i4)*2;
+							if(iTemp1>=10)
+								szTemp2[i4]=iTemp1-10+'0';
+							else
+								szTemp2[i4]=iTemp1+'0';
+						}
+					}
+					if(iTemp1>=10)
+					{
+						szTemp2[i4]=1+'0';
+						szTemp2[i4+1]='\0';
+					}						
+					else
+						szTemp2[i4]='\0';
+
+					iTemp2=cXtoD(szTemp2,0)+cXtoD(szTemp1,i2);
+					for(int i5=0;i5<strlen(szTemp2);i5++)
+					{
+						if(iTemp2>=10)
+						{
+							szTemp2[i5]=iTemp2-10+'0';
+							iTemp2=cXtoD(szTemp2,i5+1)+1;		
+						}
+						else
+						{
+							szTemp2[i5]=iTemp2+'0';
+							break;
+						}
+					}
+					if(iTemp2>=10)
+					{
+						szTemp2[strlen(szTemp2)]=1+'0';
+						szTemp2[strlen(szTemp2)+1]='\0';
+					}
+						
+					else
+						szTemp2[strlen(szTemp2)]='\0';
+				}
+				for(int i3=0;i3<strlen(szTemp2);i3++)
+				{
+					szTemp3[i3]=szTemp2[strlen(szTemp2)-i3-1];
+					szTemp3[i3+1]='\0';
+				}
+				  cprintf("\n String = %s  -->  Dec. Value =",s);
+				  printf("%s\n",szTemp3);
+				  cprintf("\r");
+				  //fprintf(ff,"%s\n",szTemp3);
+				  blResultOK=TRUE;
+			}
+			else cprintf("open %s ERROR...\n\r", argv[i+2]);
+		}
+      continue;
+    }
+ //   if(stricmp(argv[i+1], "/H2D")==0) {
+ //     if(!blNologo) Logo();
+ //     if(!blUseStartAddress || !blUseEndAddress) ReadMe();
+ //     blParameterOK=TRUE;
+ //     if((f=fopen(argv[i+2],"r"))==NULL){
+	//cprintf("\n ERROR !! %s Not Found !!\n\r",argv[i+2]);
+	//fcloseall();
+	//End(-1);
+ //     }
+ //     if((ff=fopen("H2D.dat","w"))==NULL){
+	//cprintf("\n ERROR !! Can Not Open H2D.dat !!\n\r");
+	//fcloseall();
+	//End(-1);
+ //     }
+ //     fgets(s,100,f);
+ //     k=0;
+ //     for(j=dwStartAddress;j<=dwEndAddress;j++){
+	//s3[k]=s[j];
+	//s3[k]=toupper(s3[k]);
+	//k++;
+	//if(j==dwEndAddress+1) s3[k]='\0';
+ //     }
+ //     if(dwStartAddress>dwEndAddress) {
+	//printf("\n Byte Set ERROR !! Start Byte= %ld > End Byte= %ld !!\n", dwStartAddress, dwEndAddress);
+	//fcloseall();
+	//End(-1);
+ //     }
+ //     m=dwEndAddress-dwStartAddress+1;
+ //     if(m>8){
+	//printf("\n ERROR !! Byte Amount = %d , Over Range !!\n",m);
+	//printf("\n The Limit Is 8 Bytes !!\n");
+	//break;
+ //     }
+ //     for(k=1;k<=m;k++){
+	//for(j=0;j<16;j++)
+	//  if(s3[k-1]==Code[j]) break;
+	//if(j==16){
+	//    printf("\n ERROR !! The String '%s' Is Not Hex !!\n",s3);
+	//    fcloseall();
+	//    End(-1);
+	//}
+	//sum=sum+j*pow(16,m-k);
+ //     }
+ //     printf("\n String = %s  -->  Dec. Value = %lu\n",s3,sum);
+ //     fprintf(ff,"%lu\n",sum);
+ //     blResultOK=TRUE;
+ //   }
+    if(stricmp(argv[i+1], "/RC")==0) {
+      if(!blNologo) Logo();
+      blParameterOK=TRUE;
+      if((f=fopen(argv[i+2],"r"))==NULL){
+	cprintf("\n ERROR !! %s Not Found !!\n\r",argv[i+2]);
+	fcloseall();
+	End(-1);
+      }
+      BitNo=atoi(argv[i+3]);
+      fgets(s,100,f);
+      s[BitNo-1]=toupper(s[BitNo-1]);
+      for(j=0;j<36;j++){
+	if(s[BitNo-1]==Code[j]){
+	  printf(" Bit = %d  -->  Data = %c\n",BitNo,s[BitNo-1]);
+	  printf("\n Return Code = %d\n",j);
+	  fcloseall();
+	  End(j);
+	}
+      }
+    }
+    if(stricmp(argv[i+1], "/SB")==0) {
+      if(!blNologo) Logo();
+      if(argc>(i+3)) blParameterOK=TRUE;
+      else ReadMe();
+      if(Set_Barcode_Environment(argv[i+2],argv[i+3])) blResultOK=TRUE;
+    }
+    if(stricmp(argv[i+1], "/TSTR")==0) {
+      if(!blNologo) Logo();
+      //if(argc==(i+5) && strlen(argv[i+3])==strlen(argv[i+4])) blParameterOK=TRUE;
+      if(argc==(i+5)) blParameterOK=TRUE;
+      else ReadMe();
+      if(Transfer_String(argv[i+2],argv[i+3],argv[i+4])) blResultOK=TRUE;
+    }
+
+    if(stricmp(argv[i+1], "-start_comma") == 0) { // start number of searching by comma
+      blComma = TRUE;
+      nSmsk = atoi(argv[i+2]);
+      continue;
+    }
+    if(stricmp(argv[i+1], "-end_comma") == 0) {   // end number of searching by comma
+      blComma = TRUE;
+      nEmsk = atoi(argv[i+2]);
+      continue;
+    }
+
+    if(stricmp(argv[i+1], "/GSTR")==0) {
+      if(argc<3) ReadMe();
+      else blParameterOK=TRUE;
+      if(!blNologo) Logo();
+      if(GetString(argv[i+2])) blResultOK=TRUE;
+    }
+
+    if(stricmp(argv[i+1], "/GSTR1")==0) {
+      if(argc<3) ReadMe();
+      else blParameterOK=TRUE;
+      if(!blNologo) Logo();
+      if(GetString(argv[i+2])) blResultOK=TRUE;
+      printf("\n");
+    }
+    if(stricmp(argv[i+1], "-LSB")==0) {
+      blLastBit=TRUE;
+      LastBit=atoi(argv[i+2]);
+      continue;
+    }
+
+    if(stricmp(argv[i+1], "/SET")==0) {
+      if(!blNologo) Logo();
+      if(argc>5) blParameterOK=TRUE;
+      else ReadMe();
+      if(Set_Environment_Variable(str3,EnvirVar,argv[i+2],argv[i+3])) blResultOK=TRUE;
+    }
+    if(stricmp(argv[i+1], "-sstr")==0) {
+      strcpy(str3,argv[i+2]);
+      continue;
+    }
+    if(stricmp(argv[i+1], "-sev")==0) {
+      strcpy(EnvirVar,argv[i+2]);
+      continue;
+    }
+    if(stricmp(argv[i+1], "/random") == 0){
+      blRandom = TRUE;
+      blParameterOK = TRUE;
+      if(!blNologo) Logo();
+      if(blCreateRandom(nLength)) blResultOK = TRUE;
+      else ReadMe();
+    }
+    if(stricmp(argv[i+1], "-Length") == 0){
+      if(!isdigit(*argv[i+2])){
+	blParameterOK = FALSE;
+	break;
+      }
+      nLength = atoi(argv[i+2]);
+      blParameterOK = TRUE;
+      continue;
+    }
+    if(stricmp(argv[i+1], "/random1") == 0){
+      char Code[37]={'0','1','2','3','4','5','6','7','8','9','_','A','B','C',
+		     'D','E','F','G','H','I','J','K','L','M','N','O','P','Q',
+		     'R','S','T','U','V','W','X','Y','Z'};
+      blRandom = TRUE;
+      blParameterOK = TRUE;
+      if(!blNologo) Logo();
+      randomize();
+      for(int ii=0; ii<nLength; ii++) {
+	printf("%c",Code[random(37)]);
+      }
+      printf("\0");
+      blResultOK = TRUE;
+      End(0);
+    }
+    if(stricmp(argv[i+1], "-Length1") == 0){
+      if(!isdigit(*argv[i+2])){
+	blParameterOK = FALSE;
+	break;
+      }
+      nLength = atoi(argv[i+2]);
+      blParameterOK = TRUE;
+      continue;
+    }
+    if(stricmp(argv[i+1], "/TIB")==0) {
+      if(!blNologo) Logo();
+      if(argc==6) blParameterOK=TRUE;
+      else ReadMe();
+      if(WlFileIntoCertainPosition(argv[i+2], argv[i+3], argv[i+4], argv[i+5])) blResultOK=TRUE;
+    }
+    if(stricmp(argv[i+1], "/R1")==0) {
+      if(!blNologo) Logo();
+      if(argc==4) blParameterOK=TRUE;
+      else ReadMe();
+      textcolor(15);
+      if((f1=fopen(argv[i+2],"r"))==NULL) {
+	textbackground(4);
+	cprintf("\n\rERROR !! %s Not Found !!\n\r",argv[i+2]);
+	End(-1);
+      }
+      for(j=0;j<14;j++){
+	ch=fgetc(f1);
+	printf("set %s0%d=%c\n",argv[3],j,ch);
+      }
+    }
+    if(stricmp(argv[i+1], "/R2")==0) {
+      if(!blNologo) Logo();
+      if(argc==4) blParameterOK=TRUE;
+      else ReadMe();
+      if((f1=fopen(argv[i+2],"r"))==NULL) {
+	textbackground(4);
+	cprintf("\n\rERROR !! %s Not Found !!\n\r",argv[i+2]);
+	End(-1);
+      }
+      while(fgets(d,80,f1)!=NULL){
+	if(strlen(d)==14 || strlen(d)==15 || strlen(d)==19)
+	  printf("set %s=%s",argv[i+3],d);
+	else{
+	  textbackground(4);
+	  cprintf("\n\rERROR !!  %s Length=%d !!\n\r",argv[i+2],strlen(d));
+	  End(-1);
+	}
+      }
+    }
+    if(stricmp(argv[i+1], "/R3")==0) {
+      if(!blNologo) Logo();
+      if(argc==5) blParameterOK=TRUE;
+      else ReadMe();
+      if((f1=fopen(argv[i+2],"r"))==NULL) {
+	textbackground(4);
+	cprintf("\n\rERROR !! %s Not Found !!\n\r",argv[i+2]);
+	End(-1);
+      }
+      x=atoi(argv[i+3]);
+      fseek(f1,x,0);
+      printf("set %s%d=",argv[i+4],x);
+      for(j=0;j<12;j++){
+	d[j]=fgetc(f1);
+	if(j==8) d[j]='.';
+	printf("%c",d[j]);
+      }
+      d[15-x]='\0';
+      if((f=fopen(d,"w"))==NULL){
+	textbackground(4);
+	cprintf("\n Write File ERROR !! \n\r");
+	End(-1);
+      }
+    }
+    if(stricmp(argv[i+1], "/R4")==0){
+      if(!blNologo) Logo();
+      if(argc==5) blParameterOK=TRUE;
+      else ReadMe();
+      if((f1=fopen(argv[i+2],"r"))==NULL) {
+	textbackground(4);
+	cprintf("\n\rERROR !! %s Not Found !!\n\r",argv[i+2]);
+	End(-1);
+      }
+      fgets(s,100,f1);
+      if(strlen(s)==19){
+	printf("set %s=",argv[i+3]);
+	strcpy(d,argv[i+4]);
+	for(j=0;j<20;j++) d[j]=toupper(d[j]);
+	for(i=0;i<12;i++){
+	  if(d[i]=='.'){
+	    str3[i]=d[i];
+	    printf("%c",d[i]);
+	    continue;
+	  }
+	  for(j=0;j<20;j++){
+	    if(d[i]==Code[j]){
+	      str3[i]=s[j-1];
+	      printf("%c",s[j-1]);
+	      break;
+	    }
+	    if(j==19 && d[i]!=Code[j]){
+	      textbackground(4);
+	      cprintf("\n\n\r%s Name Is ERROR !! \n\r",d);
+	      End(-1);
+	    }
+	  }
+	  if(i==19){
+	    str3[i]='\0';
+	    printf("\0");
+	  }
+	}
+	if((f=fopen(str3,"w"))==NULL){
+	  textbackground(4);
+	  cprintf("\n Write File ERROR !! \n\r");
+	  End(-1);
+	}
+      }
+      else{
+	textbackground(4);
+	cprintf("\n\rERROR !!  %s Length=%d !!\n\r",argv[i+2],strlen(s));
+	End(-1);
+      }
+    }
+    if(stricmp(argv[i+1], "/R5")==0) {
+      if(!blNologo) Logo();
+      k=0;
+      if(argc==6) blParameterOK=TRUE;
+      else ReadMe();
+      if((f1=fopen(argv[i+2],"r"))==NULL) {
+	textbackground(4);
+	cprintf("\n\rERROR !! %s Not Found !!\n\r",argv[i+2]);
+	End(-1);
+      }
+      x=atoi(argv[i+3]);
+      y=atoi(argv[i+4]);
+      fseek(f1,x,0);
+      printf("set %s%d=",argv[i+5],x);
+      for(j=0;j<12;j++){
+	k++;
+	if(y<=9 && k==y){
+	  fgetc(f1);
+	  j--;
+	  continue;
+	} else if(y>9 && k==(y+1)){
+	  fgetc(f1);
+	  j--;
+	  continue;
+	}
+
+	if(y<=9 && k==10){
+	  d[j]='.';
+	  printf("%c",d[j]);
+	  continue;
+	} else if(y>9 && k==9){
+	  d[j]='.';
+	  printf("%c",d[j]);
+	  continue;
+	} else d[j]=fgetc(f1);
+
+	printf("%c",d[j]);
+      }
+      d[12]='\0';
+      if((f=fopen(d,"w"))==NULL){
+	textbackground(4);
+	cprintf("\n Write File ERROR !! \n\r");
+	End(-1);
+      }
+    }
+    if(stricmp(argv[i+1], "/R6")==0){
+      if(!blNologo) Logo();
+      k=0;
+      if(argc==6) blParameterOK=TRUE;
+      else ReadMe();
+      if((f1=fopen(argv[i+2],"r"))==NULL) {
+	textbackground(4);
+	cprintf("\n\rERROR !! %s Not Found !!\n\r",argv[i+2]);
+	End(-1);
+      }
+      x=atoi(argv[i+3]);
+      y=atoi(argv[i+4]);
+      fseek(f1,x,0); //remove first 3 digits
+      printf("set %s=",argv[i+5]);
+
+      for(j=0;j<100;j++){
+	if(7<=j && (j<=(7+y-1))) fgetc(f1); //remove middle y digits
+	else{
+	  if(k==8){
+	    d[k]='.';
+	    k++;
+	  }
+	  if(k==12){
+	    d[k]='\0';
+	    break;
+	  }
+	  else{
+	    d[k]=fgetc(f1);
+	    k++;
+	  }
+	}
+      }
+      printf("%s",d);
+
+      if((f=fopen(d,"w"))==NULL){
+	textbackground(4);
+	cprintf("\n Write File ERROR !! \n\r");
+	End(-1);
+      }
+    }
+    if(stricmp(argv[i+1], "/R7")==0) {
+      if(!blNologo) Logo();
+      if(argc==6) blParameterOK=TRUE;
+      else ReadMe();
+      if((f1=fopen(argv[i+2],"r"))==NULL) {
+	textbackground(4);
+	cprintf("\n\rERROR !! %s Not Found !!\n\r",argv[i+2]);
+	End(-1);
+      }
+      x=atoi(argv[i+3]);
+      d[0]=*argv[i+4];
+      fseek(f1,x,0);
+      printf("set %s%d=",argv[i+5],x);
+      printf("%c",d[0]);
+      for(j=1;j<9;j++){
+	if(j==8) d[j]='.';
+	else d[j]=fgetc(f1);
+	printf("%c",d[j]);
+      }
+      for(j=9;j<12;j++){
+	d[j]=fgetc(f1);
+	printf("%c",d[j]);
+      }
+      d[16-x]='\0';
+      if((f=fopen(d,"w"))==NULL){
+	textbackground(4);
+	cprintf("\n Write File ERROR !! \n\r");
+	End(-1);
+      }
+    }
+    if(stricmp(argv[i+1], "/OBWSN")==0){
+      if(!blNologo) Logo();
+      if(argc<3) ReadMe();
+      if(blOBWSN(argv[i+2])) End(0);
+      End(-1);
+    }
+    if(stricmp(argv[i+1], "/CopyData")==0){
+      if(!blNologo) Logo();
+      if((argc<8)||(!blSetStr1)||(!blSetStr2)) ReadMe();
+      else blParameterOK=TRUE;
+      if(blCopyData(str4,str5,argv[i+2],argv[i+3])) blResultOK=TRUE;
+    }
+    if(stricmp(argv[i+1], "-str1")==0){
+      strcpy(str4,argv[i+2]);
+      blSetStr1=TRUE;
+      continue;
+    }
+    if(stricmp(argv[i+1], "-str2")==0){
+      strcpy(str5,argv[i+2]);
+      blSetStr2=TRUE;
+      continue;
+    }
+    if(stricmp(argv[i+1], "/CmpData")==0){
+      if(!blNologo) Logo();
+      if((argc<6)||(!blSetStr1)) ReadMe();
+      else blParameterOK=TRUE;
+      if(blCmpData(str4,argv[i+2],argv[i+3])) blResultOK=TRUE;
+    }
+    if(stricmp(argv[i+1], "-str")==0){
+      strcpy(str4,argv[i+2]);
+      blSetStr1=TRUE;
+      continue;
+    }
+  }
+  fcloseall();
+  if(blResultOK && blParameterOK) End(0);
+  else if(!blParameterOK) ReadMe();
+  End(-1);
+}
